@@ -56,35 +56,36 @@ watch(
   },
 )
 const fontSizes = [
-  { label: t('base.fontSize.default'), value: '14px', order: 4 },
-  { label: t('base.fontSize.42pt'), value: '42pt', order: 20 }, // 56
-  { label: t('base.fontSize.36pt'), value: '36pt', order: 19 }, // 48
-  { label: t('base.fontSize.26pt'), value: '26pt', order: 16 }, // 35
-  { label: t('base.fontSize.24pt'), value: '24pt', order: 15 }, // 32
-  { label: t('base.fontSize.22pt'), value: '22pt', order: 14 }, // 29
-  { label: t('base.fontSize.18pt'), value: '18pt', order: 11 }, // 24
-  { label: t('base.fontSize.16pt'), value: '16pt', order: 10 }, // 22
-  { label: t('base.fontSize.15pt'), value: '15pt', order: 9 }, // 21
-  { label: t('base.fontSize.14pt'), value: '14pt', order: 7 }, // 19
-  { label: t('base.fontSize.12pt'), value: '12pt', order: 4 }, // 16
-  { label: t('base.fontSize.10_5pt'), value: '10.5pt', order: 1 }, // 14
-  { label: t('base.fontSize.9pt'), value: '9pt', order: 3 }, // 12
-  { label: t('base.fontSize.7_5pt'), value: '7.5pt', order: 1 }, // 10
-  { label: t('base.fontSize.6_5pt'), value: '6.5pt', order: 0 }, // 9
+  // { label: t('base.fontSize.42pt'), value: '42pt', order: 20 }, // 56
+  // { label: t('base.fontSize.36pt'), value: '36pt', order: 19 }, // 48
+  // { label: t('base.fontSize.26pt'), value: '26pt', order: 16 }, // 35
+  // { label: t('base.fontSize.24pt'), value: '24pt', order: 15 }, // 32
+  // { label: t('base.fontSize.18pt'), value: '18pt', order: 11 }, // 24
+  // { label: t('base.fontSize.16pt'), value: '16pt', order: 10 }, // 22
+  // { label: t('base.fontSize.12pt'), value: '12pt', order: 4 }, // 16
+  // { label: t('base.fontSize.9pt'), value: '9pt', order: 3 }, // 12
+  // { label: t('base.fontSize.7_5pt'), value: '7.5pt', order: 1 }, // 10
+  // { label: t('base.fontSize.6_5pt'), value: '6.5pt', order: 0 }, // 9
   { label: '10', value: '10px', order: 1 },
   { label: '11', value: '11px', order: 2 },
   { label: '12', value: '12px', order: 3 },
+  { label: t('base.fontSize.default'), value: '14px', order: 4 },
   { label: '16', value: '16px', order: 5 },
   { label: '18', value: '18px', order: 6 },
+  { label: '19', value: '19px', order: 7 }, // 19
   { label: '20', value: '20px', order: 8 },
+  { label: '21', value: '21px', order: 9 }, // 21
   { label: '22', value: '22px', order: 10 },
   { label: '24', value: '24px', order: 11 },
   { label: '26', value: '26px', order: 12 },
   { label: '28', value: '28px', order: 13 },
+  { label: '30', value: '30px', order: 14 }, // 29
   { label: '32', value: '32px', order: 15 },
+  { label: '34', value: '34px', order: 16 }, // 35
   { label: '36', value: '36px', order: 17 },
   { label: '42', value: '42px', order: 18 },
   { label: '48', value: '48px', order: 19 },
+  { label: '56', value: '56px', order: 20 }, // 56
   { label: '72', value: '72px', order: 21 },
   { label: '96', value: '96px', order: 22 },
 ]

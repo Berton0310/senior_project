@@ -1,7 +1,7 @@
 import type { Extension } from '@tiptap/core'
 import type { AsyncFunction } from '@tool-belt/type-predicates'
 
-export type SupportedLocale = 'en-US' | 'zh-CN' | 'ru-RU'
+export type SupportedLocale = 'en-US' | 'zh-CN' | 'ru-RU' | 'zh-TW'
 export interface MarginOption {
   left: number
   right: number
@@ -68,6 +68,7 @@ export interface ToolbarOptions {
   importWord: {
     enabled: boolean
     options: unknown
+    maxSize: number
     useCustomMethod?: boolean
     onCustomImportMethod?: (file: File) => Promise<{
       id: string
@@ -104,7 +105,7 @@ export interface DocumentOptions {
 
 export type LocaleLabel =
   | string
-  | { en_US: string; zh_CN: string; ru_RU: string }
+  | { en_US: string; zh_CN: string; ru_RU: string; zh_TW: string }
 
 export interface PageSize {
   label: LocaleLabel

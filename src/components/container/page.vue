@@ -70,6 +70,15 @@
       :images="previewImages"
       @close="imageViewer.visible = false"
     />
+    <Ai
+      v-if="showAIDrawer"
+      :width="aiWidth"
+      :messages="aiMessages"
+      :disable-send="disable_sent"
+      @close="showAIDrawer = false"
+      @update:width="aiWidth = $event"
+      @send="onAISend"
+    />
     <t-back-top
       :container="`${container} .umo-zoomable-container`"
       :visible-height="800"
@@ -88,6 +97,29 @@ const container = inject('container')
 const imageViewer = inject('imageViewer')
 const pageOptions = inject('page')
 
+const showAIDrawer = inject('showAIDrawer', ref(false))
+import Ai from './ai.vue'
+const aiWidth = ref(360)
+const disable_sent = ref(false)
+// 新增：AI 聊天訊息狀態
+const aiMessages = ref<{ role: 'user' | 'ai'; content: string }[]>([
+  // { role: 'user', content: '你好，AI！' },
+  // { role: 'ai', content: '您好，有什麼我可以幫忙的嗎？' },
+  // { role: 'user', content: '請幫我介紹一下 Umo Editor。' },
+  // {
+  //   role: 'ai',
+  //   content: 'Umo Editor 是一款基於 Vue 和 Tiptap 的協作型富文本編輯器。',
+  // },
+])
+// 新增：AI 訊息送出處理
+function onAISend(msg: string) {
+  disable_sent.value = true
+  aiMessages.value.push({ role: 'user', content: msg })
+  setTimeout(() => {
+    aiMessages.value.push({ role: 'ai', content: `重複:${msg}` })
+    disable_sent.value = false
+  }, 5000)
+}
 // 页面大小
 const pageSize = $computed(() => {
   const { width, height } = pageOptions.value.size ?? { width: 0, height: 0 }

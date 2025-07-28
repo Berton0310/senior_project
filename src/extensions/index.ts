@@ -1,6 +1,9 @@
+// ── 外部模組 ─────────────────────────────
 import SearchReplace from '@sereneinserenade/tiptap-search-and-replace'
 import Bold from '@tiptap/extension-bold'
 import CharacterCount from '@tiptap/extension-character-count'
+// import Collaboration from '@tiptap/extension-collaboration'
+// import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import Color from '@tiptap/extension-color'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Focus from '@tiptap/extension-focus'
@@ -20,12 +23,16 @@ import type { Editor, Extension } from '@tiptap/vue-3'
 import { ColumnsExtension as Columns } from '@tiptap-extend/columns'
 import Mathematics from '@tiptap-pro/extension-mathematics'
 import NodeRange from '@tiptap-pro/extension-node-range'
-import { getHierarchicalIndexes } from '@tiptap-pro/extension-table-of-contents'
-import { TableOfContents } from '@tiptap-pro/extension-table-of-contents'
+import {
+  getHierarchicalIndexes,
+  TableOfContents,
+} from '@tiptap-pro/extension-table-of-contents'
 
+// ── Alias（@ 開頭）───────────────────────
 import type { UmoEditorOptions } from '@/types'
 import { shortId } from '@/utils/short-id'
 
+// ── 專案內部模組 ───────────────────────
 import Audio from './audio'
 import Bookmark from './bookmark'
 import BreakMarks from './break-marks'
@@ -70,8 +77,13 @@ export const getDefaultExtensions = ({
   options: { value: UmoEditorOptions }
   uploadFileMap: { value: any }
 }) => {
+  // const ydoc = new Y.Doc()
+  // const provider = new WebsocketProvider(
+  //   'ws://localhost:1234', // 請改成你的協作伺服器位址
+  //   'umo-editor-document', // 可以根據實際文件 ID 改成動態
+  //   ydoc,
+  // )
   const { dicts, page, document: doc, users, file } = options.value
-
   const extensions = [
     StarterKit.configure({
       bold: false,
@@ -80,7 +92,19 @@ export const getDefaultExtensions = ({
       codeBlock: false,
       horizontalRule: false,
       dropcursor: false,
+      history: {},
     }),
+    // ✅ 加入協作擴充功能
+    // Collaboration.configure({
+    //   document: ydoc,
+    // }),
+    // CollaborationCursor.configure({
+    //   provider,
+    //   user: {
+    //     name: 'Wen', // 可以改為動態取使用者名稱
+    //     color: '#01B468', // 每個使用者不同顏色
+    //   },
+    // }),
     Placeholder.configure({
       placeholder: () => String(l(doc?.placeholder ?? '')),
     }),

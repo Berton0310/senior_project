@@ -82,7 +82,7 @@ import { getOpitons } from '@/utils/options'
 import { shortId } from '@/utils/short-id'
 
 import ruConfig from '../locales/tdesign/ru-RU'
-
+import zhTWConfig from '../locales/tdesign/zh-TW'
 const { toBlob, toJpeg, toPng } = domToImage
 
 defineOptions({ name: 'UmoEditor' })
@@ -133,6 +133,13 @@ const exportFile = ref({ pdf: false, image: false })
 const uploadFileMap = ref(new Map())
 // const bookmark = ref(false)
 const destroyed = ref(false)
+// const ydoc = new Y.Doc()
+
+// const provider = new WebsocketProvider(
+//   'ws://localhost:1234', // 你自己的 WebSocket 伺服器 URL
+//   'umo-editor-document', // 文件ID，所有人需一致才能協作
+//   ydoc,
+// )
 provide('container', container)
 provide('options', options)
 provide('editor', editor)
@@ -417,6 +424,7 @@ const localeConfig = $ref<Record<string, GlobalConfigProvider>>({
   'zh-CN': cnConfig as unknown as GlobalConfigProvider,
   'en-US': enConfig as unknown as GlobalConfigProvider,
   'ru-RU': ruConfig as unknown as GlobalConfigProvider,
+  'zh-TW': zhTWConfig as unknown as GlobalConfigProvider,
 })
 
 // Options Setup
@@ -516,9 +524,7 @@ const setWatermark = (params: Partial<WatermarkOption>) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
-  if (!page.value.watermark) {
-    page.value.watermark = {} as WatermarkOption
-  }
+  page.value.watermark ??= {} as WatermarkOption
   if (isDefined(params.alpha)) {
     if (!isNumber(params.alpha)) {
       throw new Error('"params.alpha" must be a number.')
@@ -579,9 +585,7 @@ const setDocument = (params: DocumentOptions) => {
   if (!isRecord(params)) {
     throw new Error('params must be an object.')
   }
-  if (!options.value.document) {
-    options.value.document = {} as DocumentOptions
-  }
+  options.value.document ??= {} as DocumentOptions
   if (params.title) {
     if (!isString(params.title)) {
       throw new Error('"params.title" must be a string.')
@@ -708,7 +712,7 @@ const getContent = (format = 'html') => {
 
 // Locale Methods
 const setLocale = (params: SupportedLocale) => {
-  if (!['zh-CN', 'en-US', 'ru-RU'].includes(params)) {
+  if (!['zh-CN', 'en-US', 'ru-RU', 'zh-TW'].includes(params)) {
     throw new Error('"params" must be one of "zh-CN", "en-US" or "ru-RU".')
   }
   if (locale.value === params) {

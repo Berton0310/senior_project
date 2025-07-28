@@ -467,6 +467,7 @@ const langs = [
   { content: '🇨🇳 简体中文', value: 'zh-CN' },
   { content: '🇱🇷 English', value: 'en-US' },
   { content: '🇷🇺 Русский', value: 'ru-RU' },
+  { content: '🇹🇼 繁體中文', value: 'zh-TW' },
 ]
 const setLocale = inject('setLocale') as (value: SupportedLocale) => void
 

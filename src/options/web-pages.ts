@@ -2,6 +2,7 @@ export const defaultWebPages = [
   {
     label: {
       zh_CN: '哔哩哔哩',
+      zh_TW: '嗶哩嗶哩',
       en_US: 'Bilibili',
       ru_RU: 'Bilibili',
     },
@@ -20,6 +21,7 @@ export const defaultWebPages = [
   {
     label: {
       zh_CN: '优酷',
+      zh_TW: '優酷',
       en_US: 'Youku',
       ru_RU: 'Youku',
     },
@@ -36,6 +38,7 @@ export const defaultWebPages = [
   {
     label: {
       zh_CN: 'Figma',
+      zh_TW: 'Figma',
       en_US: 'Figma',
       ru_RU: 'Figma',
     },
@@ -54,6 +57,7 @@ export const defaultWebPages = [
   {
     label: {
       zh_CN: '墨刀',
+      zh_TW: '墨刀',
       en_US: 'MockingBot',
       ru_RU: 'MockingBot',
     },
@@ -69,6 +73,7 @@ export const defaultWebPages = [
   {
     label: {
       zh_CN: '腾讯视频',
+      zh_TW: '騰訊影片',
       en_US: 'Tencent Video',
       ru_RU: 'Tencent Video',
     },

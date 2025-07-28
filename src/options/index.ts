@@ -26,7 +26,7 @@ import { defaultWebPages } from './web-pages'
 // 默认配置
 const defaultOptions: UmoEditorOptions = {
   editorKey: 'default',
-  locale: 'zh-CN',
+  locale: 'zh-TW',
   theme: 'light',
   height: '100%',
   fullscreenZIndex: 10,
@@ -37,6 +37,7 @@ const defaultOptions: UmoEditorOptions = {
     disableMenuItems: [],
     importWord: {
       enabled: true,
+      maxSize: 1024 * 1024 * 5, // 100M
       options: {},
       useCustomMethod: false,
       async onCustomImportMethod() {
@@ -80,6 +81,7 @@ const defaultOptions: UmoEditorOptions = {
       en_US: 'Please enter the document content...',
       zh_CN: '请输入文档内容...',
       ru_RU: 'Пожалуйста, введите содержимое документа...',
+      zh_TW: '請輸入文檔內容...',
     },
     enableSpellcheck: true,
     enableMarkdown: true,
@@ -135,6 +137,7 @@ const defaultOptions: UmoEditorOptions = {
     en_US: {},
     zh_CN: {},
     ru_RU: {},
+    zh_TW: {},
   },
   async onSave() {
     return await new Promise((_, reject) => {
@@ -166,7 +169,7 @@ const isLocale = (value: unknown) => {
   }
   if (isRecord(value)) {
     for (const key of Object.keys(value)) {
-      if (!['en_US', 'zh_CN', 'ru_RU'].includes(key)) {
+      if (!['en_US', 'zh_CN', 'ru_RU', 'zh_TW'].includes(key)) {
         return false
       }
     }
@@ -184,9 +187,9 @@ const ojbectSchema = new ObjectSchema({
   locale: {
     merge: 'replace',
     validate(value) {
-      if (value && !['en-US', 'zh-CN', 'ru-RU'].includes(value)) {
+      if (value && !['en-US', 'zh-CN', 'ru-RU', 'zh-TW'].includes(value)) {
         throw new Error(
-          'Key "locale": must be one of "en-US", "zh-CN" or "ru-RU".',
+          'Key "locale": must be one of "en-US", "zh-TW","zh-CN" or "ru-RU".',
         )
       }
     },

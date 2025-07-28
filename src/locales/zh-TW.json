@@ -1,0 +1,748 @@
+{
+  "welcome": "%c感謝您使用 Umo Editor%c目前版本：v{version}，更多資訊：{homepage}",
+  "toolbar": {
+    "ribbon": "專業版",
+    "classic": "經典版",
+    "toggle": "工具列",
+    "show": "顯示工具列",
+    "hide": "隱藏工具列",
+    "base": "常用",
+    "insert": "插入",
+    "table": "表格",
+    "tools": "工具",
+    "page": "頁面",
+    "export": "匯出"
+  },
+  "base": {
+    "align": {
+      "title": "對齊",
+      "left": "靠左對齊",
+      "center": "置中對齊",
+      "right": "靠右對齊",
+      "justify": "左右對齊",
+      "distributed": "分散對齊"
+    },
+    "bgColor": "文字背景顏色",
+    "bold": "粗體",
+    "clearFormat": "清除文字格式",
+    "code": "程式碼",
+    "color": "字體顏色",
+    "fontFamily": {
+      "text": "選擇字體",
+      "all": "通用字體",
+      "recent": "最近使用",
+      "used": "已使用字體",
+      "unsupport": "此字體可能無法正常顯示，可能未在此裝置上安裝"
+    },
+    "fontSize": {
+      "text": "字體大小",
+      "increase": "放大字體",
+      "decrease": "縮小字體",
+      "default": "預設",
+      "42pt": "初號",
+      "36pt": "小初",
+      "26pt": "一號",
+      "24pt": "小一",
+      "22pt": "二號",
+      "18pt": "小二",
+      "16pt": "三號",
+      "15pt": "小三",
+      "14pt": "四號",
+      "12pt": "小四",
+      "10_5pt": "五號",
+      "9pt": "小五",
+      "7_5pt": "小六",
+      "6_5pt": "預設"
+    },
+    "formatPainter": {
+      "text": "格式刷",
+      "tip": "格式刷：雙擊可重複使用，按 ESC 退出"
+    },
+    "heading": {
+      "text": "標題 {level}",
+      "paragraph": "正文",
+      "tip": "設定標題，可根據標題建立文件導覽"
+    },
+    "highlight": {
+      "text": "醒目提示",
+      "clear": "清除醒目提示",
+      "yellowBg": "黃色背景",
+      "purpleBg": "紫色背景",
+      "greenBg": "綠色背景",
+      "blueBg": "藍色背景",
+      "red": "紅色文字",
+      "green": "綠色文字"
+    },
+    "indent": "增加縮排",
+    "italic": "斜體",
+    "lineHeight": {
+      "text": "行高",
+      "default": " (預設)"
+    },
+    "outdent": "減少縮排",
+    "margin": {
+      "text": "垂直間距",
+      "top": "段落上方",
+      "bottom": "段落下方",
+      "default": "預設",
+      "reset": "自動間距"
+    },
+    "importWord": {
+      "text": "匯入 Word",
+      "loadScript": {
+        "title": "錯誤訊息",
+        "message": "正在載入轉換指令碼，請稍後再試。"
+      },
+      "limitSize": "檔案大小不能超過 5MB。",
+      "converting": "正在轉換 Word 文件，請稍候...",
+      "convertError": "解析 Word 文件時發生錯誤",
+      "importError": "匯入 Word 文件時發生錯誤"
+    },
+    "markdown": {
+      "text": "Markdown",
+      "enable": "啟用 Markdown",
+      "disable": "停用 Markdown",
+      "message": "此操作將重設編輯器，切換後目前歷史記錄將遺失，無法復原等。立即確認？",
+      "toggle": "立即切換"
+    },
+    "quote": "引文",
+    "redo": "重做",
+    "selectAll": "全選",
+    "strike": "刪除線",
+    "subscript": "下標",
+    "superscript": "上標",
+    "underline": "底線",
+    "undo": "復原"
+  },
+  "insert": {
+    "audio": "音訊",
+    "codeBlock": "程式碼區塊",
+    "date": "中文日期",
+    "emoji": "表情符號",
+    "file": "檔案",
+    "hardBreak": "換行符號",
+    "hr": {
+      "text": "分隔線",
+      "title": "分隔線樣式",
+      "color": "分隔線顏色",
+      "signle": "單實線",
+      "double": "雙細線",
+      "dotted": "點虛線",
+      "dashed": "短虛線",
+      "dashedDouble": "雙短虛線",
+      "signleBold": "粗實線",
+      "doubleBoldTop": "上粗下細線",
+      "doubleBoldBottom": "上細下粗線",
+      "wavy": "波浪線"
+    },
+    "image": "圖片",
+    "link": {
+      "text": "超連結",
+      "insert": "插入",
+      "remove": "移除",
+      "hrefText": "連結文字：",
+      "hrefTextTip": "輸入或選取連結文字",
+      "href": "連結網址：",
+      "hrefTip": "通常以 http:// 或 https:// 開頭",
+      "copy": "複製連結",
+      "copySuccess": "複製完成",
+      "open": "開啟連結",
+      "edit": "編輯連結"
+    },
+    "math": "數學公式",
+    "columns": "欄",
+    "tag": "標籤",
+    "callout": "引言框",
+    "mention": "提及",
+    "bookmark": {
+      "text": "書籤",
+      "set": "設定書籤",
+      "ok": "確定",
+      "textName": "書籤名稱",
+      "placeholder": "請輸入書籤名稱...",
+      "show": "顯示書籤",
+      "actions": "操作",
+      "delete": "刪除書籤",
+      "emptyError": "請輸入書籤名稱或選取書籤"
+    },
+    "symbol": "符號",
+    "template": "範本",
+    "textBox": "文字方塊",
+    "toc": "文件導覽",
+    "video": "影片",
+    "web": {
+      "text": "網頁",
+      "insert": "插入",
+      "title": "插入網頁",
+      "tip": "部分網頁可能不支援嵌入。",
+      "type": "連結類型：",
+      "url": "網址：",
+      "placeholder": "輸入網址，以 http:// 或 https:// 開頭"
+    }
+  },
+  "table": {
+    "addColumnAfter": "在右側插入欄",
+    "addColumnBefore": "在左側插入欄",
+    "addRowAfter": "在下方插入列",
+    "addRowBefore": "在上方插入列",
+    "borderColor": "框線顏色",
+    "cellAlign": {
+      "text": "對齊",
+      "tip": "儲存格對齊",
+      "lt": "左上對齊",
+      "ct": "中上對齊",
+      "rt": "右上對齊",
+      "jt": "左右對齊(頂端)",
+      "lm": "左中對齊",
+      "cm": "置中對齊",
+      "rm": "右中對齊",
+      "jm": "左右對齊(中間)",
+      "lb": "左下對齊",
+      "cb": "中下對齊",
+      "rb": "右下對齊",
+      "jb": "左右對齊(底端)"
+    },
+    "cellBgColor": {
+      "text": "背景",
+      "tip": "儲存格背景顏色"
+    },
+    "deleteColumn": {
+      "text": "刪除欄",
+      "title": "刪除表格欄",
+      "message": "此操作將刪除選取的表格欄。是否繼續？",
+      "delete": "立即刪除",
+      "success": "刪除成功"
+    },
+    "deleteRow": {
+      "text": "刪除列",
+      "title": "刪除表格列",
+      "message": "此操作將刪除選取的表格列。是否繼續？",
+      "delete": "立即刪除",
+      "success": "刪除成功"
+    },
+    "delete": {
+      "text": "刪除表格",
+      "title": "刪除目前表格",
+      "message": "此操作將刪除選取的表格。是否繼續？",
+      "delete": "立即刪除",
+      "success": "刪除成功"
+    },
+    "fix": {
+      "text": "修復表格",
+      "tip": "如果表格損壞，按一下可自動修復"
+    },
+    "insert": {
+      "text": "插入表格",
+      "tip": "插入新表格",
+      "property": "表格屬性",
+      "withHeader": "包含標題列",
+      "rows": "列數：",
+      "cols": "欄數：",
+      "create": "建立表格"
+    },
+    "mergeCells": "合併儲存格",
+    "nextCell": "下一個儲存格",
+    "prevCell": "上一個儲存格",
+    "splitCell": "分割儲存格",
+    "toggleHeaderCell": "標題儲存格",
+    "toggleHeaderRow": "標題列",
+    "toggleHeaderColumn": "標題欄"
+  },
+  "tools": {
+    "barcode": {
+      "text": "條碼",
+      "edit": "編輯條碼",
+      "title": "條碼",
+      "format": "格式",
+      "font": "字體樣式",
+      "lineColor": "條碼與文字顏色",
+      "bgColor": "條碼背景顏色",
+      "more": "更多",
+      "width": "寬度：",
+      "height": "高度：",
+      "margin": "邊距：",
+      "displayValue": "顯示文字",
+      "displayValueText": "顯示文字",
+      "textContent": "文字內容：",
+      "textContentTip": "取代條碼的文字內容",
+      "textPosition": "文字位置：",
+      "top": "上方",
+      "bottom": "下方",
+      "textMargin": "垂直距離：",
+      "fontSize": "字體大小：",
+      "placeholder": "輸入要轉換成條碼的內容",
+      "error": "您的輸入可能不符合目前條碼標準的限制，請檢查。",
+      "preview": "預覽",
+      "renderError": "無法預覽",
+      "notEmpty": "條碼內容不可為空"
+    },
+    "chineseCase": {
+      "text": "中文大小寫",
+      "tip": "轉換中文字元大小寫"
+    },
+    "diagrams": {
+      "text": "圖表",
+      "edit": "編輯圖表",
+      "loading": "載入中..."
+    },
+    "mermaid": {
+      "text": "Mermaid",
+      "edit": "編輯 Mermaid",
+      "placeholder": "輸入 Mermaid 程式碼",
+      "preview": "預覽",
+      "notEmpty": "Mermaid 內容不可為空"
+    },
+    "echarts": {
+      "text": "圖表",
+      "add": "新增圖表",
+      "edit": "編輯圖表",
+      "source": "進階模式",
+      "visualization": "基本模式",
+      "placeholder": "輸入 echarts 格式的資料",
+      "sourceerror": "echarts 結構不正確，請確認！",
+      "sourceerror2": "echarts 結構不正確或未定義！",
+      "dataGrid": "資料",
+      "setting": "設定",
+      "settingerror": "請檢查檢視是否正確！",
+      "set": {
+        "bar": "長條圖",
+        "line": "折線圖",
+        "pie": "圓餅圖",
+        "top": "頂部",
+        "bottom": "底部",
+        "left": "左側",
+        "center": "中間",
+        "right": "右側",
+        "horizontal": "水平",
+        "vertical": "垂直",
+        "smooth": "平滑折線",
+        "seriesType": "圖表類型",
+        "legend": "顯示圖例",
+        "legendorient": "圖例佈局",
+        "legendlocation": "垂直位置",
+        "legendleft": "水平位置",
+        "titleText": "標題文字",
+        "titleTextPlaceholder": "輸入標題文字...",
+        "titleleft": "標題"
+      }
+    },
+    "mindMap": "心智圖",
+    "qrcode": {
+      "text": "QR Code",
+      "edit": "編輯 QR Code",
+      "level": "QR Code 容錯等級",
+      "levelL": "低",
+      "levelM": "中",
+      "levelQ": "四分位",
+      "levelH": "高",
+      "padding": "邊距：",
+      "paddingTip": "留白邊距",
+      "width": "大小：",
+      "widthTip": "QR Code 大小 (像素)",
+      "color": "QR Code 顏色",
+      "bgColor": "背景顏色",
+      "placeholder": "輸入要轉換成 QR Code 的內容",
+      "preview": "預覽",
+      "renderError": "無法建立 QR Code",
+      "notEmpty": "QR Code 內容不可為空"
+    },
+    "seal": {
+      "text": "官印",
+      "title": "插入官印",
+      "insert": "插入",
+      "tip": "選取單色背景的印章影本或照片；它將自動擷取。所有操作均在本地執行，不會將資料傳送到伺服器，因此您可以放心使用。",
+      "insertTip": "按一下此處選取印章圖片",
+      "converting1": "正在載入元件...",
+      "converting2": "正在載入元件：{percentage}%",
+      "converting3": "正在擷取圖片，請稍候...",
+      "convertError": "無法擷取電子印章，請重試",
+      "notEmpty": "請選取印章"
+    },
+    "signature": {
+      "text": "電子簽名",
+      "title": "插入電子簽名",
+      "clear": "清除",
+      "lineWidth": "筆劃粗細",
+      "lineColor": "筆劃顏色",
+      "smooth": "顯示筆觸",
+      "reset": "重設設定",
+      "tip": "請在此區域簽名",
+      "notEmpty": "未偵測到簽名"
+    }
+  },
+  "page": {
+    "bg": {
+      "text": "背景",
+      "custom": "自訂頁面背景",
+      "default": "預設",
+      "color1": "護眼綠",
+      "color2": "雅致黃",
+      "color3": "雲水藍",
+      "color4": "天空藍",
+      "color5": "暗夜黑"
+    },
+    "breakMarks": "顯示分頁符號",
+    "break": "分頁符號",
+    "lineNumber": "行號",
+    "margin": "邊界",
+    "orientation": {
+      "text": "方向",
+      "landscape": "橫向",
+      "portrait": "縱向"
+    },
+    "preview": "簡報",
+    "size": {
+      "text": "大小",
+      "cm": "公分",
+      "custom": "自訂設定"
+    },
+    "watermark": {
+      "text": "浮水印",
+      "fontFamily": "浮水印字體",
+      "fontSize": "浮水印大小",
+      "fontColor": "浮水印顏色",
+      "content": "浮水印文字",
+      "type": "浮水印樣式",
+      "compact": "緊湊",
+      "spacious": "寬鬆",
+      "clear": "移除浮水印"
+    }
+  },
+  "export": {
+    "embed": {
+      "text": "嵌入",
+      "title": "嵌入程式碼",
+      "tip": "複製後，請手動調整 iframe 的寬度和高度以獲得最佳檢視效果。",
+      "copy": "複製",
+      "copied": "程式碼已複製到剪貼簿"
+    },
+    "image": {
+      "text": "圖片",
+      "jpg": "JPG",
+      "png": "PNG",
+      "error": {
+        "title": "錯誤訊息",
+        "message": "無法匯出圖片，請重試或重新整理頁面。"
+      }
+    },
+    "share": {
+      "text": "分享",
+      "tip": "複製連結並傳送給您想分享的人。",
+      "copy": "複製連結",
+      "copied": "連結已複製到剪貼簿"
+    },
+    "pdf": {
+      "text": "PDF 文件",
+      "title": "匯出 PDF 文件前，請確認頁面上的所有圖片都已載入。然後在彈出的列印對話方塊中，選取「印表機 - 另存為 PDF」並按一下「儲存」按鈕。為確保所有內容正確顯示，請在列印對話方塊中勾選「背景圖形」選項，並將「邊界」設定為「無」。",
+      "confirm": "了解"
+    },
+    "text": "文字"
+  },
+  "list": {
+    "bullet": {
+      "text": "項目符號清單",
+      "disc": "實心圓點",
+      "circle": "空心圓點",
+      "square": "實心方塊"
+    },
+    "ordered": {
+      "text": "編號清單",
+      "property": "清單屬性",
+      "startAt": "起始編號：",
+      "decimal": "數字",
+      "decimalLeadingZero": "數字 (首位補零)",
+      "lowerRoman": "小寫羅馬數字",
+      "upperRoman": "大寫羅馬數字",
+      "lowerLatin": "小寫英文字母",
+      "upperLatin": "大寫英文字母",
+      "tradChineseInformal": "中文數字 (小寫)",
+      "simpChineseFormal": "中文數字 (大寫)"
+    },
+    "task": {
+      "text": "待辦事項清單",
+      "split": "新增待辦事項",
+      "sink": "轉換為子任務",
+      "lift": "從待辦事項中移除"
+    }
+  },
+  "colorPicker": {
+    "default": "預設顏色",
+    "standard": "標準顏色",
+    "recent": "最近使用",
+    "more": "更多顏色"
+  },
+  "blockMenu": {
+    "insert": "插入內容",
+    "template": "插入範本",
+    "toogleNode": "切換區塊類型",
+    "common": "常用操作",
+    "clearFormat": "清除格式",
+    "duplicate": "複製",
+    "copy": "複製",
+    "cut": "剪下",
+    "delete": "刪除"
+  },
+  "bubbleMenu": {
+    "code": {
+      "copy": {
+        "text": "複製程式碼",
+        "success": "程式碼已複製到剪貼簿"
+      },
+      "languages": "語言",
+      "lineNumbers": "顯示行號",
+      "themes": {
+        "text": "主題",
+        "light": "淺色主題",
+        "dark": "深色主題"
+      },
+      "wordWrap": "自動換行"
+    },
+    "file": {
+      "download": "下載檔案"
+    },
+    "image": {
+      "open": "在新視窗中開啟",
+      "draggable": "浮動圖片",
+      "flipX": "水平翻轉",
+      "flipY": "垂直翻轉",
+      "preview": "預覽圖片",
+      "proportion": "鎖定長寬比",
+      "removeBg": "移除圖片背景",
+      "removingBg": "正在移除圖片背景...",
+      "reset": "重設圖片位置",
+      "rotateCC": "逆時針旋轉 90°",
+      "rotateC": "順時針旋轉 90°"
+    },
+    "textBox": {
+      "background": "背景顏色",
+      "border": "邊框設定",
+      "borderColor": "邊框顏色",
+      "borderStyle": "邊框樣式",
+      "noBorder": "無邊框"
+    },
+    "callout": {
+      "removeEmoji": "移除表情符號",
+      "background": "背景顏色"
+    },
+    "tag": {
+      "placeholder": "標籤名稱",
+      "background": "背景顏色",
+      "color": "文字顏色",
+      "delete": "刪除標籤"
+    },
+    "webpage": {
+      "clickable": "切換可點擊",
+      "open": "在新視窗中開啟"
+    },
+    "toFile": "儲存到檔案",
+    "delete": "刪除"
+  },
+  "assistant": {
+    "text": "AI 助理",
+    "placeholder": "輸入或選取指令...",
+    "send": "傳送",
+    "exit": "離開 AI 助理",
+    "commands": "常用指令：",
+    "result": "AI 產生結果：",
+    "replace": "取代",
+    "insertAfter": "插入於後",
+    "insertBelow": "插入於下",
+    "copy": "複製結果",
+    "copySuccess": "結果已複製到剪貼簿",
+    "rewrite": "重寫",
+    "delete": "刪除結果",
+    "error": {
+      "title": "錯誤訊息",
+      "message": "處理 AI 助理結果時發生錯誤。請重試！",
+      "confirm": "確定"
+    }
+  },
+  "pageOptions": {
+    "title": "頁面設定",
+    "size": {
+      "text": "頁面大小",
+      "width": "寬度：",
+      "height": "高度：",
+      "custom": "自訂"
+    },
+    "margin": {
+      "text": "頁面邊界",
+      "default": "預設",
+      "narrow": "窄",
+      "moderate": "中等",
+      "wide": "寬",
+      "top": "上邊界：",
+      "right": "右邊界：",
+      "bottom": "下邊界：",
+      "left": "左邊界："
+    }
+  },
+  "document": {
+    "untitled": "未命名文件"
+  },
+  "search": {
+    "text": "搜尋",
+    "title": "搜尋與取代",
+    "searchText": "搜尋...",
+    "replaceText": "取代為...",
+    "caseSensitive": "區分大小寫",
+    "search": "搜尋",
+    "replace": "取代",
+    "replaceAll": "全部取代"
+  },
+  "toc": {
+    "title": "文件導覽",
+    "show": "顯示文件導覽",
+    "hide": "隱藏文件導覽",
+    "empty": "文件導覽不可用"
+  },
+  "spellcheck": {
+    "enable": "啟用拼字檢查",
+    "disable": "停用拼字檢查"
+  },
+  "shortcut": {
+    "title": "快捷鍵",
+    "text": "文字",
+    "commonlyUsed": "常用",
+    "copy": "複製",
+    "paste": "貼上",
+    "pasteAsText": "貼上為純文字",
+    "paragraph": "插入新段落",
+    "hardBreak": "換行符號",
+    "format": "文字格式",
+    "page": "頁面",
+    "pageZoomIn": "放大",
+    "pageZoomOut": "縮小",
+    "pageZoomReset": "重設為預設縮放比例",
+    "pageAutoWidth": "符合頁寬",
+    "markdown": "Markdown"
+  },
+  "changeLocale": {
+    "title": "變更語言",
+    "message": "變更語言後，頁面將會重新整理。請儲存文件內容。您確定要立即變更語言嗎？",
+    "confirm": "變更"
+  },
+  "resetAll": {
+    "title": "重設編輯器",
+    "message": "此操作將清除所有編輯器設定和目前內容，並重新整理頁面。建議在重設前儲存內容。您確定要立即重設設定嗎？",
+    "reset": "重設"
+  },
+  "feedback": "問題回報／意見反應",
+  "poweredBy": "由 Umo Editor 強力驅動",
+  "wordCount": {
+    "characters": "字元",
+    "title": "文件統計",
+    "input": "輸入字元",
+    "selection": "選取字元",
+    "limit": "字元限制"
+  },
+  "preview": {
+    "title": "簡報",
+    "disable": "結束簡報模式",
+    "countdown": {
+      "title": "設定倒數計時",
+      "select": "選取",
+      "selectTip": "選取倒數計時長度",
+      "custom": "自訂",
+      "hours": "小時",
+      "minutes": "分鐘",
+      "seconds": "秒",
+      "whenEnd": "結束時",
+      "showEndMessage": "顯示結束訊息",
+      "exitPreview": "結束簡報模式",
+      "start": "開始",
+      "cancel": "取消",
+      "1hour": "1 小時",
+      "45minutes": "45 分鐘",
+      "30minutes": "30 分鐘",
+      "15minutes": "15 分鐘",
+      "10minutes": "10 分鐘",
+      "5minutes": "5 分鐘",
+      "error": "請設定正確的倒數計時時間",
+      "endCountdown": "倒數計時結束",
+      "remaining": "剩餘時間"
+    },
+    "laserPointer": "雷射筆"
+  },
+  "fullscreen": {
+    "title": "全螢幕",
+    "disable": "結束全螢幕"
+  },
+  "zoom": {
+    "zoomIn": "放大",
+    "zoomOut": "縮小",
+    "level": "縮放等級：",
+    "autoWidth": "最佳符合頁寬",
+    "autoWidthError": "計算自動頁寬時發生錯誤",
+    "reset": "還原為 100%"
+  },
+  "node": {
+    "codeBlock": {
+      "menu": "選單"
+    },
+    "image": {
+      "loading": "正在載入圖片...",
+      "error": "無法載入圖片"
+    },
+    "textBox": {
+      "tip": "雙擊以編輯"
+    }
+  },
+  "file": {
+    "uploading": "正在上傳檔案...",
+    "preview": "預覽",
+    "download": "下載檔案",
+    "limit": "檔案 \"{filename}\" 超過 {size}MB 的限制",
+    "unknownName": "未知名稱",
+    "unknownSize": "未知大小",
+    "notAllow": {
+      "title": "錯誤訊息",
+      "message": "目前文件不允許插入此類型的檔案。"
+    }
+  },
+  "callout": {
+    "placeholder": "請輸入內容"
+  },
+  "mention": {
+    "noResult": "找不到結果"
+  },
+  "save": {
+    "text": "儲存",
+    "saved": "已儲存",
+    "unsaved": "未儲存",
+    "network": "網路狀態：",
+    "online": "連線中",
+    "offline": "離線",
+    "saving": "正在儲存文件...",
+    "savedAt": "儲存於：",
+    "savedAtText": "儲存於 {time}",
+    "failed": "無法儲存文件",
+    "success": "文件儲存成功",
+    "error": "儲存文件時發生錯誤",
+    "cache": {
+      "text": "從快取還原",
+      "error": {
+        "title": "錯誤訊息",
+        "message": "快取中沒有內容！"
+      }
+    }
+  },
+  "print": {
+    "text": "列印",
+    "title": "列印文件",
+    "message": "列印文件前，請確認頁面上的所有圖片都已載入。為確保所有內容正確顯示，請在列印對話方塊中勾選「背景圖形」選項，並將「邊界」設定為「無」。",
+    "confirm": "立即列印"
+  },
+  "time": {
+    "justNow": "剛剛",
+    "past": "{n} 前",
+    "yesterday": "昨天",
+    "day": "{n} 天",
+    "hour": "{n} 小時",
+    "minute": "{n} 分鐘",
+    "second": "{n} 秒"
+  },
+  "dialog": {
+    "cancel": "取消"
+  }
+}
