@@ -114,6 +114,8 @@ const startResize = (e: MouseEvent) => {
   isResizing.value = true
   startX.value = e.clientX
   initialWidth.value = aiWidth.value
+  // 禁止選取內容
+  document.body.style.userSelect = 'none'
   document.addEventListener('mousemove', resize)
   document.addEventListener('mouseup', stopResize)
 }
@@ -131,6 +133,8 @@ const resize = (e: MouseEvent) => {
 }
 const stopResize = () => {
   isResizing.value = false
+  // 恢復選取內容
+  document.body.style.userSelect = ''
   document.removeEventListener('mousemove', resize)
   document.removeEventListener('mouseup', stopResize)
 }
@@ -264,7 +268,7 @@ const stopResize = () => {
       background 0.2s;
   }
   .umo-ai-send:disabled {
-    opacity: 0.5;
+    opacity: 0.25;
     cursor: not-allowed;
   }
 
