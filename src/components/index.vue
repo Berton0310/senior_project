@@ -83,6 +83,7 @@ import { shortId } from '@/utils/short-id'
 
 import ruConfig from '../locales/tdesign/ru-RU'
 import zhTWConfig from '../locales/tdesign/zh-TW'
+
 const { toBlob, toJpeg, toPng } = domToImage
 
 defineOptions({ name: 'UmoEditor' })
@@ -713,7 +714,9 @@ const getContent = (format = 'html') => {
 // Locale Methods
 const setLocale = (params: SupportedLocale) => {
   if (!['zh-CN', 'en-US', 'ru-RU', 'zh-TW'].includes(params)) {
-    throw new Error('"params" must be one of "zh-CN", "en-US" or "ru-RU".')
+    throw new Error(
+      '"params" must be one of "zh-CN", "en-US", "ru-RU" or "zh-TW".',
+    )
   }
   if (locale.value === params) {
     return

@@ -153,7 +153,7 @@ const stopResize = () => {
   position: relative;
   flex-shrink: 0;
   z-index: 10;
-  transition: width 0.2s;
+  transition: width 0.001s;
   .umo-ai-resize-handle {
     position: absolute;
     top: 0;

@@ -170,6 +170,7 @@ const stopResize = () => {
   flex-direction: column;
   position: relative;
   max-width: 400px;
+
   .umo-toc-resize-handle {
     position: absolute;
     top: 0;

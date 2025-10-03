@@ -51,9 +51,9 @@ const formatDateToChinese = (dateStr: string) => {
 }
 
 const options = [
-  { content: '自定义日期', format: 'YYYY-M-D', capitalize: false },
+  { content: '自定義日期', format: 'YYYY-M-D', capitalize: false },
   {
-    content: '自定义时间',
+    content: '自定義時間',
     value: 'withTime',
     format: 'YYYY-M-D HH:mm:ss',
     capitalize: false,
@@ -96,7 +96,7 @@ const insertDate = ({ content, format, capitalize, value }: any) => {
   editor.value
     ?.chain()
     .insertDatetime({
-      text: content.includes('自定义') ? `[${content}]` : content,
+      text: content.includes('自定義') ? `[${content}]` : content,
       date: formDate(format), // formDate('YYYY-MM-DD HH:mm:ss'),
       withTime: value === 'withTime',
       format,

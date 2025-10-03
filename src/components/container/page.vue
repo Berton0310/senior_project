@@ -116,7 +116,10 @@ function onAISend(msg: string) {
   disable_sent.value = true
   aiMessages.value.push({ role: 'user', content: msg })
   setTimeout(() => {
-    aiMessages.value.push({ role: 'ai', content: `重複:${msg}` })
+    // aiMessages.value.push({ role: 'ai', content: `重複:${msg}` })
+    const getcontent = editorInstance.value?.getHTML()
+    const getjson = editorInstance.value?.getJSON()
+    aiMessages.value.push({ role: 'ai', content: getjson })
     disable_sent.value = false
   }, 5000)
 }
