@@ -1,17 +1,23 @@
-export const contentTransform = (content: string) => {
-  // 处理空内容或非字符串内容
-  if (content && typeof content === 'string' && !content.startsWith('<')) {
-    // 检查是否包含 Markdown 标题语法
-    const hasMarkdownHeadings =
-      /^#{1,6}\s/.test(content) || content.includes('\n#')
+import MarkdownIt from 'markdown-it'
 
-    if (hasMarkdownHeadings) {
-      // 如果包含 Markdown 标题，直接返回让 Tiptap 处理
-      return content
+const md = new MarkdownIt({ html: false, linkify: true, breaks: true })
+
+export const contentTransform = (content: string) => {
+  if (content && typeof content === 'string' && !content.startsWith('<')) {
+    // 判斷是否像 Markdown（標題/列表/粗斜體/連結等）
+    const looksLikeMarkdown =
+      /^#{1,6}\s/.test(content) || // 標題
+      /(^|\n)(-|\*|\+)\s+/.test(content) || // 無序列表
+      /(^|\n)\d+\.\s+/.test(content) || // 有序列表
+      /\*\*.+\*\*|__.+__|\*.+\*|_.+_/.test(content) || // 粗斜體
+      /\[.+\]\(.+\)/.test(content) // 連結
+
+    if (looksLikeMarkdown) {
+      // 轉為 HTML 交由編輯器解析
+      return md.render(content)
     }
 
-    // 处理纯文本中的换行符
-    console.log(content.split('\n'))
+    // 純文字：以換行分段
     return content
       .split('\n')
       .map((line) => `<p>${line}</p>`)

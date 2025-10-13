@@ -1,7 +1,16 @@
 <template>
   <div class="examples">
     <div class="box">
-      <umo-editor v-if="options" ref="editorRef" v-bind="options" />
+      <NewDocument
+        v-if="stage === 'new'"
+        @confirm="startEditor"
+        @cancel="onCancelNew"
+      />
+      <umo-editor
+        v-else-if="options && stage === 'editor'"
+        ref="editorRef"
+        v-bind="options"
+      />
     </div>
     <button
       :class="['ai-fab', { 'ai-fab--hidden': showAIDrawer }]"
@@ -20,6 +29,7 @@
 
 <script setup lang="ts">
 import { shortId } from '@/utils/short-id'
+import NewDocument from '@/pages/new-document.vue'
 
 // API 初始化函式
 async function initDocument() {
@@ -39,76 +49,96 @@ async function initDocument() {
     return {
       title: '测试文档',
       // content: '<p>預設內容\n測試內容</p>',
-      content: `<h3 id="_1"><strong>第一部分：正面影響——台灣經濟的成長引 擎與「護國神山」</strong><a class="headerlink" href="#_1" title="永久連結到此標題">&para;</a></h3>
-<ol>
-<li>
-<p><strong>經濟成長的核心驅動力</strong>：</p>
-<ul>
-<li><strong>對GDP的巨大貢axian</strong>：半導體產業產值約佔台灣GDP的18-20%，是支撐台灣經濟成長的最重要支柱。以台積電為首的企業，其資本支出和市值對經濟有著舉足輕重的影響。</li>
-<li><strong>出口創匯的絕對主力</strong>：電子零組件（以半導體為主）佔台灣總出口額超過四成，為台灣賺取大量外匯，穩 定金融市場，並增強了抵禦全球經濟風險的能力。</li>        
-</ul>
-</li>
-<li>
-<p><strong>建立完整的產業生態系</strong>：</p>
-<ul>
-<li>台灣已形成從上游（IC設計，如聯發科）、中游（晶圓代工 ，如台積電），到下游（封裝測試，如日月光）的完整且高效的 垂直分工產業鏈。</li>
-<li>這種高度群聚的效應（主要集中在新竹、台中、台南科學園 區）大幅提升了生產效率、促進了技術交流，鞏固了台灣在全球 的領導地位。</li>
-</ul>
-</li>
-<li>
-<p><strong>創造高薪就業與培養人才</strong>：</p>
-<ul>
-<li>該產業創造了數十萬個高薪的就業機會，顯著高於國內平均 薪資水平，有效提升了國民所得，並帶動了周邊服務業的發展。</li>
-<li>頂尖的產業環境吸引了全球人才，並成為台灣理工科系學生 的職涯首選，形成了穩固的人才正向循環。</li>
-</ul>
-</li>
-<li>
-<p><strong>提升全球戰略地位（「矽盾」）</strong>：</p>   
-<ul>
-<li>台灣在全球半導體供應鏈中的關鍵地位，使其成為全球經濟 不可或缺的一環。任何對台灣的威脅都可能導致全球電子產業斷 鏈，從而引發經濟危機。</li>
-<li>「矽盾」（Silicon Shield）的角色讓美國、日本、歐洲等 主要經濟體有強烈動機維護台海穩定，也成為台灣在美中科技角 力下的重要地緣政治籌碼。</li>
-</ul>
-</li>
-</ol>
-<h3 id="_2"><strong>第二部分：潛在風險與挑戰——榮景背後的 隱憂</strong><a class="headerlink" href="#_2" title="永久連結到此標題">&para;</a></h3>
-<ol>
-<li>
-<p><strong>產業過度集中的風險</strong>：</p>
-<ul>
-<li><strong>經濟失衡</strong>：過多資源（人才、資金、水電）集中於半導體，可能排擠其他傳統產業與服務業的發展，導致 產業結構失衡與貧富差距擴大。</li>
-<li><strong>景氣循環衝擊</strong>：半導體產業具有高度的景氣循環性。一旦全球市場需求放緩，將直接且劇烈地衝擊台灣的 整體經濟。</li>
-</ul>
-</li>
-<li>
-<p><strong>地緣政治的雙面刃</strong>：</p>
-<ul>
-<li><strong>戰略目標風險</strong>：「矽盾」雖是保護，但也使台灣成為地緣政治衝突的焦點，面臨來自中國的威脅以及美國 供應鏈「去台化」的壓力。</li>
-<li><strong>自主性受限</strong>：在全球科技戰的背景下，台灣的產業政策與發展不得不過度參考美國的臉色，自主性受到挑 戰。</li>
-</ul>
-</li>
-<li>
-<p><strong>國內資源的排擠與環境壓力</strong>：</p>       
-<ul>
-<li><strong>資源消耗巨大</strong>：先進製程是典型的高耗能、高耗水產業，在台灣水電資源本已緊張的情況下，加劇了與民 生及其他產業的資源競爭。</li>
-<li><strong>環境負擔</strong>：製程中使用的化學品及產生的廢棄物，對環境的長期影響是社會必須正視的課題。</li>      
-</ul>
-</li>
-<li>
-<p><strong>人才斷層與外流</strong>：</p>
-<ul>
-<li>隨著各國大力發展本土半導體產業，對台灣人才的挖角日益 激烈，造成人才缺口。</li>
-<li>台灣的少子化問題，將在未來嚴重影響理工人才的供給，對 產業的長期發展構成根本性威脅。</li>
-</ul>
-</li>
-</ol>
-<h3 id="_3"><strong>結論與未來展望</strong><a class="headerlink" href="#_3" title="永久連結到此標題">&para;</a></h3>
-<p>總體而言，半導體產業是驅動台灣經濟成長、鞏固國際地位的「渦輪引擎」。然而，這個引擎也消耗了大量資源，並使經濟結 構過度集中，帶來潛在風險。</p>
-<p>為了實現永續發展，台灣未來必須：<br />
-1.  <strong>維持技術領先</strong>：持續投入研發，確保在先進製程領域的領導地位。<br />
-2.  <strong>推動產業多元化</strong>：利用半導體優勢，帶動AI、智慧醫療、綠能等新興產業發展，打造「第二座護國神山」 。<br />
-3.  <strong>解決資源與人才問題</strong>：制定長期的能源與人才政策，應對內部挑戰。<br />
-4.  <strong>靈活應對地緣政治</strong>：在全球供應鏈重組中，採取靈活的國際佈局，同時將核心技術根留台灣。</p>       
-<p>駕馭好這座「護國神山」，使其在保護台灣的同時，不對社會與環境造成過度負擔，將是台灣未來最重要的課題。</p>     `,
+      content: `# 人工智慧在醫療診斷領域的最新應用：2023-2025 年現狀、挑戰與未來展望
+
+## 概覽
+
+自 2023 年以來，人工智慧 (AI) 持續在醫療診斷領域掀起變革，尤其是在放射學與病理學等高度依賴影像分析的專科中。以深度學習 (DL) 為核心的技術，透過自動化特徵提取與模式識別，在提高診斷準確性、速度及效率方面展現了巨大潛力。從偵測微小骨折到辨識癌細胞，AI 正從輔助工具逐步發展為臨床工作流程中不可或缺的一部分。然而，這項技術的廣泛應用仍面臨著數據隱私、法規遵循、工作流程整合以及倫理等多重挑戰。本報告旨在綜合 2023 年至 2025 年的最新研究，全面概述 AI 在醫療診斷領域的現狀、具體應用、挑戰及未來方向。
+
+## 放射學：AI 賦能影像診斷的新紀元
+
+放射學是 AI 應用最成熟的領域之一。從 2023 年到 2025 年，由卷積神經網路 (CNN) 驅動的 AI 工具，在分析 X 光、CT 掃描和 MRI 等醫學影像方面取得了顯著進展，特別是在神經影像和胸腔影像等臨床需求高的領域 [1, 2]。
+
+### AI 技術與具體應用案例
+
+*   **技術類型**：深度學習模型是此領域的核心，例如用於分類的 **ResNet** 和用於影像分割的 **U-Net**。此外，大型語言模型 (LLM) 也開始被用於自動生成放射學報告，以減輕放射科醫生的工作負擔 [1]。
+
+*   **乳癌診斷**：深度學習在分析乳房組織病理學影像方面顯示出卓越的診斷潛力。
+    *   **效能比較**：一項 2024 年的研究指出，基於 YOLO 的系統在偵測腫塊位置的準確率高達 99.7%；在區分良惡性病灶方面，準確率為 97% [3]。在淋巴結轉移診斷中，DL 演算法的表現甚至優於病理學家，其曲線下面積 (AUC) 達到 0.99，而病理學家的 AUC 為 0.88 [3]。
+
+*   **肺癌偵測**：AI 在胸部電腦斷層 (CT) 掃描中偵測肺結節的能力已得到驗證。
+    *   **效能比較**：一篇 2025 年的系統性回顧發現，AI 模型在偵測肺結節方面的**敏感度**（86.0–98.1%）顯著高於放射科醫生（68–76%），但在**特異度**上略低（77.5–87% vs. 87–91.7%）[4]。這意味著 AI 能更有效地找出潛在病灶，但也可能產生更多的偽陽性結果。在評估結節惡性程度上，AI 在敏感度、特異度和準確度方面普遍優於放射科醫生 [4]。
+
+*   **骨折偵測**：AI 在 X 光影像中偵測骨折是另一個關鍵應用。多家公司，如 AZmed，已將其納入 2025 年的臨床就緒 AI 工具指南中，顯示其技術已趨於成熟 [5, 6]。
+
+### 評估與挑戰
+
+*   **臨床驗證與挑戰**：儘管 AI 表現出色，但高偽陽性率仍是一大挑戰，尤其是在肺癌偵測中。這可能導致不必要的後續檢查、增加醫療成本並為患者帶來焦慮 [4]。此外，準備高品質、標準化的醫學影像數據以供模型訓練，仍然是一項系統性工程 [1]。
+
+*   **法規遵循**：AI 醫療工具面臨複雜的監管環境。一篇 2024 年的分析指出，歐盟採用全面性的跨部門法規（如 MDR、GDPR、《AI 法案》），雖然謹慎但可能跟不上技術發展的腳步；而美國則採用更具針對性的部門性方法（如 HIPAA、FDA），更具靈活性但被批評為零散 [7]。文章呼籲應採取一種結合兩者優點的「明智且務實」的監管策略 [7]。
+
+*   **倫理影響**：責任歸屬是主要的倫理難題——當 AI 診斷出錯時，責任應由開發者、醫療機構還是 AI 本身承擔尚無定論 [8]。此外，訓練數據的偏見可能導致醫療不平等，而對數據安全的擔憂也成為採用的主要障礙 [8, 9]。
+
+### 未來展望：人機協作
+
+研究一致認為，AI 不會取代放射科醫生，而是作為增強其能力的輔助工具 [1, 8]。放射科醫生具備 AI 難以企及的適應性和深度感知能力，而 AI 則提供無與倫比的速度和數據處理能力。未來的趨勢將是人機協作，AI 負責初步篩查和量化分析，放射科醫生則進行最終的診斷決策，實現效率與精準度的最佳結合 [1]。
+
+## 病理學：AI 引領的數位化革命
+
+隨著全切片影像 (WSI) 技術的普及，數位病理學為 AI 的應用開闢了廣闊的空間。面對全球癌症發病率上升和病理學家短缺的雙重壓力，AI 正在成為提高診斷工作流程效率和準確性的關鍵 [10, 11]。
+
+### AI 技術與具體應用案例
+
+*   **技術類型**：機器學習和深度學習模型是分析數位化組織樣本的核心。
+
+*   **Paige Prostate**：這是一款用於輔助診斷前列腺癌的 AI 工具。
+    *   **效能比較與臨床驗證**：一項研究證實，病理學家在使用 Paige Prostate 後，癌症檢測錯誤減少了 70%。該工具的獨立表現顯示，其癌症檢測的敏感性高達 97.4%，特異性為 94.8%。特別是對於非泌尿生殖道專科的病理學家，敏感性顯著提升了 8.5% [12]。
+
+*   **Google 的 LYNA (淋巴結助理)**：此工具用於分析組織病理學切片以識別轉移性乳癌，據報導其準確率達到 99%，在識別微小轉移灶方面優於人類病理學家 [11]。
+
+*   **其他前沿模型**：
+    *   **CHIEF**：一個通用的病理學框架，在 11 種癌症的診斷和預後方面，其 AUROC 分數比現有模型高出 10-14% [11]。
+    *   **Prov-GigaPath**：一個用於分析千兆像素級 WSI 的基礎模型，在癌症亞型分類方面展現了頂尖性能 [11]。
+
+### 評估與挑戰
+
+*   **實施挑戰**：AI 在病理學的廣泛應用面臨四大挑戰 [13]：
+    1.  **數據**：需要大規模、帶有精確註釋的數據集，且數據註釋本身存在觀察者間的差異。
+    2.  **模型建立**：需克服組織染色、掃描器差異帶來的變異，並處理 WSI 影像的龐大規模。
+    3.  **效能評估**：缺乏標準化的基準數據集和對模型穩健性的分析。
+    4.  **部署**：將 AI 工具整合至現有的實驗室資訊系統 (LIS) 成本高昂，且面臨法規批准、互通性及報銷模式缺乏等問題 [10, 13]。
+
+*   **倫理影響**：與放射學相似，病理學 AI 的倫理問題集中在數據隱私、因訓練數據偏見導致的公平性問題，以及診斷錯誤時的問責制 [10, 14, 13]。為確保 AI 工具的公正性與可靠性，讓病理學家從開發初期就參與進來至關重要 [10]。
+
+## 基因組學：待探索的領域
+
+根據本次研究的可用發現，關於人工智慧在基因組學（例如，遺傳疾病診斷）領域從 2023 年至今的最新應用，目前尚無詳細資料。雖然 AI 在基因序列分析、突變預測等方面具有巨大潛力，但本報告無法就此專科提供具體的應用案例及評估維度。這也凸顯了該領域可能是一個值得進一步深入研究的方向。
+
+## 結論與未來方向
+
+綜合 2023 年至 2025 年的研究，人工智慧在醫療診斷領域，特別是放射學和病理學，已從理論走向臨床實踐，展現出作為強大輔助工具的潛力。AI 模型在特定任務上的表現已能媲美甚至超越人類專家，顯著提高了診斷的效率和準確性。
+
+然而，通往廣泛應用的道路依然充滿挑戰。數據標準化、高昂的實施成本、複雜的監管環境以及深刻的倫理問題是所有 AI 醫療應用共同面臨的障礙。高偽陽性率、演算法的「黑箱」性質以及數據偏見等技術瓶頸也亟待解決。
+
+未來的發展方向明確指向「人機協作」的模式。AI 不會取代醫生，而是將他們從繁瑣、重複的任務中解放出來，讓他們能更專注於複雜病例的綜合判斷、與患者的溝通以及制定個人化的治療方案。為了實現這一願景，未來的研究需要不僅專注於演算法的優化，更要著重於建立標準化的評估基準、完善監管與倫理框架，並設計能無縫融入臨床工作流程的解決方案。最終，AI 的成功將取決於它能否真正成為醫生信賴的夥伴，共同提升醫療服務的品質與可及性。
+
+### 來源
+
+[1] Artificial Intelligence-Empowered Radiology—Current Status and Future Perspectives: A State-of-the-Art Review: https://pmc.ncbi.nlm.nih.gov/articles/PMC11816879/
+[2] Artificial intelligence for diagnostics in radiology practice: a rapid ...: https://www.thelancet.com/journals/eclinm/article/PIIS2589-5370(25)00160-9/fulltext
+[3] Deep learning applications in breast cancer histopathological images: a review for diagnosis, treatment, and prognosis: https://breast-cancer-research.biomedcentral.com/articles/10.1186/s13058-024-01895-6
+[4] A Systematic Review of AI Performance in Lung Cancer Detection and Classification From Chest Computed Tomography: https://pmc.ncbi.nlm.nih.gov/articles/PMC12250385/
+[5] Enhancing diagnostic accuracy in bone fracture detection from X-ray images using ensemble deep learning models: https://www.science-gate.com/IJAAS/2025/V12I5/1021833ijaas202505008.html
+[6] The 2025 guide to clinical-ready tools [Using AI for X-ray] - AZmed: https://www.azmed.co/news-post/ai-in-radiology-the-2025-guide-to-clinical-ready-tools-using-ai-for-x-ray
+[7] EU and US Regulatory Challenges Facing AI Health Care Innovator ...: https://law.stanford.edu/2024/04/06/eu-and-us-regulatory-challenges-facing-ai-health-care-innovator-firms/
+[8] The Ethical Implications of AI in Clinical Practice in 2025 - RevMaxx: https://www.revmaxx.co/blog/the-ethical-implications-of-ai-in-clinical-practice-in-2025/
+[9] Artificial Intelligence-Empowered Radiology—Current Status and ...: https://pmc.ncbi.nlm.nih.gov/articles/PMC11816879/
+[10] Digital pathology and AI: your guide to basics and beyond - Aiforia: https://www.aiforia.com/digital-pathology-ai
+[11] Current AI technologies in cancer diagnostics and treatment: https://molecular-cancer.biomedcentral.com/articles/10.1186/s12943-025-02369-9
+[12] Clinical Validation of Artificial Intelligence–Augmented Pathology...: https://www.paige.ai/publications/clinical-validation-of-artificial-intelligenceaugmented-pathology-diagnosis-demonstrates-significant-gains-in-diagnostic-accuracy-in-prostate-cancer-detection
+[13] Unleashing the potential of AI for pathology: challenges and ...: https://pathsocjournals.onlinelibrary.wiley.com/doi/full/10.1002/path.6168
+[14] The ethical challenges of artificial intelligence‐driven digital pathology: https://onlinelibrary.wiley.com/doi/10.1002/cjp2.263
+ `,
       characterLimit: 10000,
       
     }
@@ -120,6 +150,7 @@ function onAIClick() {
 // ref 變數宣告
 const editorRef = ref(null)
 const options = ref(null)
+const stage = ref<'new' | 'editor'>('new')
 const showAIDrawer = ref(false)
 provide('showAIDrawer', showAIDrawer)
 const templates = [
@@ -137,9 +168,10 @@ const templates = [
   },
 ]
 
-// 組件掛載後載入資料與建立 options
-onMounted(async () => {
+async function startEditor(titleFromUser: string) {
   const doc = await initDocument()
+  const title = titleFromUser?.trim() || doc.title || '新文檔'
+  const content = doc.content?.trim() ? doc.content : `<h1>${title}</h1><p></p>`
 
   options.value = {
     toolbar: {
@@ -152,14 +184,9 @@ onMounted(async () => {
         },
       },
     },
-    //   document: {
-    //   title: '测试文档',
-    //   content: localStorage.getItem('document.content1') ?? '<p>测试文档測試</p>',
-    //   characterLimit: 10000,
-    // },
     document: {
-      title: doc.title,
-      content: doc.content,
+      title,
+      content,
       characterLimit: doc.characterLimit,
     },
     page: {
@@ -231,18 +258,6 @@ onMounted(async () => {
       { id: 'testuser', label: '测试用户' },
     ],
     async onSave(content: string, page: number, document: { content: string }) {
-      // localStorage.setItem('document.content1', document.content)
-      // return new Promise((resolve, reject) => {
-      //   setTimeout(() => {
-      //     const success = true
-      //     if (success) {
-      //       console.log('onSave', { content, page, document })
-      //       resolve('操作成功')
-      //     } else {
-      //       reject(new Error('操作失败'))
-      //     }
-      //   }, 2000)
-      // })
       try {
         // 發送到 FastAPI 後端
         const response = await fetch('http://localhost:8000/save-document', {
@@ -285,7 +300,13 @@ onMounted(async () => {
       console.log('File deleted:', id, url)
     },
   }
-})
+
+  stage.value = 'editor'
+}
+
+function onCancelNew() {
+  // 保持在新建頁；若需要可在此導入預設流程
+}
 </script>
 
 <style>

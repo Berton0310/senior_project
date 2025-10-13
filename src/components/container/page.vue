@@ -83,7 +83,7 @@
       :container="`${container} .umo-zoomable-container`"
       :visible-height="800"
       size="small"
-      :offset="['25px', '30px']"
+      :offset="['400px', '11px']"
     />
     <container-search-replace />
     <container-print />
