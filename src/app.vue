@@ -13,7 +13,7 @@
       />
     </div>
     <button
-      :class="['ai-fab', { 'ai-fab--hidden': showAIDrawer }]"
+      :class="['ai-fab', { 'ai-fab--hidden': showAIDrawer || stage !== 'editor' }]"
       @click="onAIClick"
     >
       <img
@@ -49,96 +49,104 @@ async function initDocument() {
     return {
       title: '测试文档',
       // content: '<p>預設內容\n測試內容</p>',
-      content: `# 人工智慧在醫療診斷領域的最新應用：2023-2025 年現狀、挑戰與未來展望
+      content: `# **台積電對台灣半導體經濟的全面影響：一份綜合研究報告**
 
-## 概覽
+本報告旨在深入分析台灣積體電路製造股份有限公司（TSMC，簡稱台積電）對台灣經濟與半導體產業生態系的全面影響。基於對政府報告、企業財報、學術分析及財經媒體的綜合研究，本報告將從總體經濟貢獻、就業創造、產業鏈發展、技術創新、資本投資以及相關風險挑戰等六個關鍵領域，進行量化與質化評估，並對未來趨勢提出展望。
 
-自 2023 年以來，人工智慧 (AI) 持續在醫療診斷領域掀起變革，尤其是在放射學與病理學等高度依賴影像分析的專科中。以深度學習 (DL) 為核心的技術，透過自動化特徵提取與模式識別，在提高診斷準確性、速度及效率方面展現了巨大潛力。從偵測微小骨折到辨識癌細胞，AI 正從輔助工具逐步發展為臨床工作流程中不可或缺的一部分。然而，這項技術的廣泛應用仍面臨著數據隱私、法規遵循、工作流程整合以及倫理等多重挑戰。本報告旨在綜合 2023 年至 2025 年的最新研究，全面概述 AI 在醫療診斷領域的現狀、具體應用、挑戰及未來方向。
+## **一、總體經濟貢獻：GDP與經濟成長的引擎**
 
-## 放射學：AI 賦能影像診斷的新紀元
+雖然本次研究未能尋獲台積電產值佔台灣GDP的精確官方百分比數據，但其對台灣經濟的巨大貢獻是毋庸置疑的。台積電作為全球最大的晶圓代工廠，其營收與出口表現直接牽動台灣的經濟成長脈動。
 
-放射學是 AI 應用最成熟的領域之一。從 2023 年到 2025 年，由卷積神經網路 (CNN) 驅動的 AI 工具，在分析 X 光、CT 掃描和 MRI 等醫學影像方面取得了顯著進展，特別是在神經影像和胸腔影像等臨床需求高的領域 [1, 2]。
+-   **營收成長目標**：台積電董事長魏哲家重申，公司2024年的美元營收成長目標維持在24-26%之間，顯示出強勁的成長動能 [1]。此一增長不僅反映了全球對AI和先進晶片的需求，也直接轉化為台灣出口額與經濟產值的提升。
+-   **經濟支柱角色**：台積電的營運表現已成為衡量台灣經濟健康度的關鍵指標。其營收佔台灣整體製造業的比重極高，其資本支出和研發投入更是驅動國內投資和技術升級的核心動力。一份研究報告指出，若將半導體出口排除，台灣在2010年至2020年間的商品出口總額實際上是下降了1.8%，凸顯了台積電及半導體產業在支撐台灣出口成長中的絕對關鍵地位 [2]。
 
-### AI 技術與具體應用案例
+## **二、就業創造：直接與間接的就業引擎**
 
-*   **技術類型**：深度學習模型是此領域的核心，例如用於分類的 **ResNet** 和用於影像分割的 **U-Net**。此外，大型語言模型 (LLM) 也開始被用於自動生成放射學報告，以減輕放射科醫生的工作負擔 [1]。
+台積電不僅是台灣最大的雇主之一，其龐大的產業生態系更間接創造了數以萬計的就業機會。儘管精確的總體就業數據難以量化，但其影響力可從以下幾個層面分析：
 
-*   **乳癌診斷**：深度學習在分析乳房組織病理學影像方面顯示出卓越的診斷潛力。
-    *   **效能比較**：一項 2024 年的研究指出，基於 YOLO 的系統在偵測腫塊位置的準確率高達 99.7%；在區分良惡性病灶方面，準確率為 97% [3]。在淋巴結轉移診斷中，DL 演算法的表現甚至優於病理學家，其曲線下面積 (AUC) 達到 0.99，而病理學家的 AUC 為 0.88 [3]。
+-   **直接就業**：台積電直接僱用大量高技術、高薪資的工程師、研發人員與技術專家。這些高品質的就業機會不僅提升了台灣的勞動力素質，也因其高薪資帶動了周邊地區的消費與經濟活動。
+-   **間接就業**：台積電的成功建立在一個龐大而緊密的本地供應鏈之上。從上游的材料、化學品、特殊氣體，到中游的設備製造、廠務工程，再到下游的封裝測試，每個環節都涵蓋了眾多協力廠商。如**漢唐**、**辛耘**、**家登**、**中砂**等企業，因與台積電的緊密合作而得以壯大，僱用了大量員工 [3, 4]。可以說，台積電每增加一個直接職位，都會在供應鏈中催生數個間接工作崗位。
+-   **人才競爭**：台積電的巨大吸引力也帶來了人才排擠效應。布魯金斯學會的分析指出，全球半導體業皆面臨人才短缺，台灣也不例外 [5]。台積電以其優渥的薪資和發展前景，吸引了最頂尖的STEM人才，使得其他傳統產業或新創企業在人才招募上面臨巨大挑戰 [2]。
 
-*   **肺癌偵測**：AI 在胸部電腦斷層 (CT) 掃描中偵測肺結節的能力已得到驗證。
-    *   **效能比較**：一篇 2025 年的系統性回顧發現，AI 模型在偵測肺結節方面的**敏感度**（86.0–98.1%）顯著高於放射科醫生（68–76%），但在**特異度**上略低（77.5–87% vs. 87–91.7%）[4]。這意味著 AI 能更有效地找出潛在病灶，但也可能產生更多的偽陽性結果。在評估結節惡性程度上，AI 在敏感度、特異度和準確度方面普遍優於放射科醫生 [4]。
+## **三、產業鏈發展：建構世界級的本土供應聚落**
 
-*   **骨折偵測**：AI 在 X 光影像中偵測骨折是另一個關鍵應用。多家公司，如 AZmed，已將其納入 2025 年的臨床就緒 AI 工具指南中，顯示其技術已趨於成熟 [5, 6]。
+台積電的「專業晶圓代工」模式不僅是其自身的成功基石，更是台灣建立完整半導體產業聚落的核心驅動力。過去四十多年來，台積電以「大廠引導供應鏈」的模式，帶動了整個台灣本土供應鏈的技術升級與業務擴張 [6]。
 
-### 評估與挑戰
+### **以大帶小的垂直分工體系**
+台積電首創的垂直分工模式，讓IC設計公司無需承擔鉅額的建廠成本，從而專注於創新，並與製造端形成緊密合作 [7]。其「開放創新平台」（OIP）更整合了電子設計自動化（EDA）與矽智財（IP）聯盟，持續推動產業的協同創新 [8]。這種模式讓台灣形成了彈性高、速度快、成本低的獨特競爭優勢 [7]。
 
-*   **臨床驗證與挑戰**：儘管 AI 表現出色，但高偽陽性率仍是一大挑戰，尤其是在肺癌偵測中。這可能導致不必要的後續檢查、增加醫療成本並為患者帶來焦慮 [4]。此外，準備高品質、標準化的醫學影像數據以供模型訓練，仍然是一項系統性工程 [1]。
+### **本土供應商的崛起與結盟**
+在台積電的積極扶植下，眾多台灣供應商從PCB、面板等領域轉向技術門檻更高的半導體產業，並隨台積電走向國際 [9]。
+-   **優良供應商**：在2024年的供應鏈管理論壇上，台積電表彰了7家台灣本土優良供應商，包括**辛耘**（設備）、**漢唐**（廠務）、**李長榮集團**（化學品）、**崇越石英**（材料）等，涵蓋了產業鏈的各個關鍵環節 [3]。
+-   **先進製程夥伴**：隨著台積電推進至3奈米、2奈米製程，相關供應商價值凸顯。例如，**家登**成為全球EUV光罩盒龍頭，**中砂**在先進製程的鑽石碟市場佔據主導地位，**旺矽**的高階探針卡也因AI、HPC需求而穩定成長 [4]。
+-   **供應商聯盟化**：為配合台積電的全球佈局與技術需求，台灣供應商掀起結盟風潮。例如，由**家登**、**意德士**等18家廠商組成的「德鑫控股」，以及由**志聖**、**均豪**、**均華**組成的「G2C+聯盟」，都旨在整合資源，共同進軍國際市場 [9]。
 
-*   **法規遵循**：AI 醫療工具面臨複雜的監管環境。一篇 2024 年的分析指出，歐盟採用全面性的跨部門法規（如 MDR、GDPR、《AI 法案》），雖然謹慎但可能跟不上技術發展的腳步；而美國則採用更具針對性的部門性方法（如 HIPAA、FDA），更具靈活性但被批評為零散 [7]。文章呼籲應採取一種結合兩者優點的「明智且務實」的監管策略 [7]。
+## **四、技術創新與研發：鞏固台灣的全球科技領導地位**
 
-*   **倫理影響**：責任歸屬是主要的倫理難題——當 AI 診斷出錯時，責任應由開發者、醫療機構還是 AI 本身承擔尚無定論 [8]。此外，訓練數據的偏見可能導致醫療不平等，而對數據安全的擔憂也成為採用的主要障礙 [8, 9]。
+台積電的行業主導地位根植於其對技術創新的不懈追求和鉅額的研發投入，這也直接鞏固了台灣在全球科技版圖中的核心角色。
 
-### 未來展望：人機協作
+-   **研發投入規模**：2024年，台積電的研發支出達到創紀錄的**63.55億美元**（約1944億新台幣），佔其營收的7.1%。此一數字約佔台灣整體製造業研發費用的四分之一，顯示其在驅動全國技術創新中的核心地位 [10]。
+-   **專利佈局**：截至2024年，台積電在全球累計的核准專利已超過**10萬件**。在台灣，台積電以1,412件發明專利申請，**連續九年**蟬聯本國申請人之首，其龐大的專利組合是其技術護城河的具體體現 [10, 11]。
+-   **技術領先優勢**：台積電在先進製程上持續領先。2025年第二季的財報顯示，7奈米及以下的先進製程佔其營收比重高達74% [1]。這種技術優勢使其成為蘋果、輝達等全球頂尖科技公司的唯一或主要供應商，讓台灣在全球高科技供應鏈中扮演著不可或缺的角色。
 
-研究一致認為，AI 不會取代放射科醫生，而是作為增強其能力的輔助工具 [1, 8]。放射科醫生具備 AI 難以企及的適應性和深度感知能力，而 AI 則提供無與倫比的速度和數據處理能力。未來的趨勢將是人機協作，AI 負責初步篩查和量化分析，放射科醫生則進行最終的診斷決策，實現效率與精準度的最佳結合 [1]。
+## **五、資本投資：驅動基礎設施與投資環境**
 
-## 病理學：AI 引領的數位化革命
+台積電在台灣的持續大規模資本支出，是驅動本地投資、創造需求及促進基礎設施升級的關鍵力量。
 
-隨著全切片影像 (WSI) 技術的普及，數位病理學為 AI 的應用開闢了廣闊的空間。面對全球癌症發病率上升和病理學家短缺的雙重壓力，AI 正在成為提高診斷工作流程效率和準確性的關鍵 [10, 11]。
+-   **投資規模**：雖然近年具體的年度資本支出總額未在研究中明確列出，但其投資規模極其龐大。例如，早在2013年，其年度資本支出就已高達90億美元 [12]。近期在美國亞利桑那州高達1550億美元的投資計畫，更反襯出其在台灣本土投資的巨大體量 [1]。
+-   **對基礎設施的影響**：一座先進晶圓廠的建設與運營，需要龐大的基礎設施支持。這不僅帶動了如**達欣工程**、**東鋼鋼結構**等營造公司的業務 [3]，更對台灣的水、電供應提出了巨大需求。為滿足台積電等半導體企業的需求，台灣政府推動了「前瞻基礎建設計畫」等政策，大力投資於再生水廠、電網韌性等項目，從而帶動了整體基礎設施的現代化 [13, 14]。
+-   **對投資環境的影響**：台積電的設廠計畫往往能帶動周邊地區的房地產、商業與服務業發展，形成所謂的「台積電效應」。更重要的是，其持續在台投資，將最先進的研發中心與產能根留台灣，向全球釋放了對台灣投資環境的信心訊號，有助於吸引更多外資與人才 [15]。
 
-### AI 技術與具體應用案例
+## **六、經濟風險與挑戰：單一依賴下的脆弱性**
 
-*   **技術類型**：機器學習和深度學習模型是分析數位化組織樣本的核心。
+在享受台積電帶來巨大經濟紅利的同時，台灣也面臨著對單一企業及產業過度依賴所帶來的潛在風險與挑戰。
 
-*   **Paige Prostate**：這是一款用於輔助診斷前列腺癌的 AI 工具。
-    *   **效能比較與臨床驗證**：一項研究證實，病理學家在使用 Paige Prostate 後，癌症檢測錯誤減少了 70%。該工具的獨立表現顯示，其癌症檢測的敏感性高達 97.4%，特異性為 94.8%。特別是對於非泌尿生殖道專科的病理學家，敏感性顯著提升了 8.5% [12]。
+### **經濟過度依賴與「荷蘭病」隱憂**
+「荷蘭病」係指一國經濟過度依賴單一強勢產業（如自然資源），導致匯率上升，削弱其他產業（如製造業）的出口競爭力。
+-   **支持觀點**：諾丁漢大學的一份報告指出，台灣已呈現「荷蘭病」的症狀。半導體產業的獨大排擠了其他產業的資源，報告數據顯示，若排除半導體，台灣在2010-2020年間的出口額是負成長的。這種現象抑制了經濟的結構性轉型 [2]。
+-   **反對觀點**：台灣財政部與中央銀行則認為，政府正透過「五加二」產業計畫推動多元發展，且塑膠、鋼鐵等傳統產業仍具全球競爭力，故不存在「荷蘭病」問題 [16]。
 
-*   **Google 的 LYNA (淋巴結助理)**：此工具用於分析組織病理學切片以識別轉移性乳癌，據報導其準確率達到 99%，在識別微小轉移灶方面優於人類病理學家 [11]。
+### **資源排擠效應：水、電、人才的競爭**
+台積電的龐大規模對台灣有限的資源構成了顯著的壓力。
+-   **水資源**：半導體製造是高度耗水產業。台積電2022年的總取水量達1.04億立方公尺 [17]。在氣候變遷導致乾旱頻發的背景下，工業用水需求與民生、農業用水之間的矛盾日益突出 [14]。
+-   **電力需求**：半導體也是能源消耗大戶。預計到2030年，台灣半導體產業的用電量將增長236% [13]。台灣超過80%的電力來自進口化石燃料，這使得能源供應鏈在地緣政治威脅下顯得格外脆弱 [13]。
+-   **人才競爭**：如前所述，半導體業吸納了大量頂尖人才，對其他產業的發展構成了挑戰。
 
-*   **其他前沿模型**：
-    *   **CHIEF**：一個通用的病理學框架，在 11 種癌症的診斷和預後方面，其 AUROC 分數比現有模型高出 10-14% [11]。
-    *   **Prov-GigaPath**：一個用於分析千兆像素級 WSI 的基礎模型，在癌症亞型分類方面展現了頂尖性能 [11]。
+### **地緣政治的脆弱性：「矽盾」的雙面刃**
+台灣生產全球約90%的先進晶片，這種主導地位被稱為「矽盾」（Silicon Shield），理論上能嚇阻軍事侵略，因為任何衝突都將引發全球經濟災難 [18, 19]。然而，這也使台灣成為地緣政治的焦點。
+-   **依賴的風險**：CSIS的報告估計，一場台海衝突可能導致全球經濟損失高達10兆美元 [19]。正因如此，美、歐、日等國正積極推動晶片製造本地化，以降低對台灣的依賴，長期可能削弱「矽盾」的保護效果 [20]。
+-   **美中科技戰的壓力**：台灣夾在美中科技競爭之間，台積電被迫遵守美國的出口管制，同時也面臨美國要求其在美設廠的壓力。這在台灣內部引發了關於核心產業被「掏空」的擔憂 [20]。
 
-### 評估與挑戰
+### **未來展望與應對策略**
+預計未來5到10年，資源限制與地緣政治壓力將持續存在。對此，台灣與台積電正採取多管齊下的策略：
+1.  **企業全球化佈局**：台積電在美國、日本、德國等地設廠，以分散風險並貼近客戶，但同時強調最先進的研發與產能（如1奈米製程）將根留台灣 [15]。
+2.  **政府推動多元化**：政府透過「五加二產業創新計畫」扶植綠能、生醫等新興產業，降低對單一半導體產業的依賴，並投資基礎設施以應對資源挑戰 [16, 13]。
+3.  **深化國際合作**：透過與美國等盟友建立更深厚的技術與貿易夥伴關係，共同維護供應鏈的韌性與安全 [5]。
 
-*   **實施挑戰**：AI 在病理學的廣泛應用面臨四大挑戰 [13]：
-    1.  **數據**：需要大規模、帶有精確註釋的數據集，且數據註釋本身存在觀察者間的差異。
-    2.  **模型建立**：需克服組織染色、掃描器差異帶來的變異，並處理 WSI 影像的龐大規模。
-    3.  **效能評估**：缺乏標準化的基準數據集和對模型穩健性的分析。
-    4.  **部署**：將 AI 工具整合至現有的實驗室資訊系統 (LIS) 成本高昂，且面臨法規批准、互通性及報銷模式缺乏等問題 [10, 13]。
+---
 
-*   **倫理影響**：與放射學相似，病理學 AI 的倫理問題集中在數據隱私、因訓練數據偏見導致的公平性問題，以及診斷錯誤時的問責制 [10, 14, 13]。為確保 AI 工具的公正性與可靠性，讓病理學家從開發初期就參與進來至關重要 [10]。
+### **來源**
 
-## 基因組學：待探索的領域
-
-根據本次研究的可用發現，關於人工智慧在基因組學（例如，遺傳疾病診斷）領域從 2023 年至今的最新應用，目前尚無詳細資料。雖然 AI 在基因序列分析、突變預測等方面具有巨大潛力，但本報告無法就此專科提供具體的應用案例及評估維度。這也凸顯了該領域可能是一個值得進一步深入研究的方向。
-
-## 結論與未來方向
-
-綜合 2023 年至 2025 年的研究，人工智慧在醫療診斷領域，特別是放射學和病理學，已從理論走向臨床實踐，展現出作為強大輔助工具的潛力。AI 模型在特定任務上的表現已能媲美甚至超越人類專家，顯著提高了診斷的效率和準確性。
-
-然而，通往廣泛應用的道路依然充滿挑戰。數據標準化、高昂的實施成本、複雜的監管環境以及深刻的倫理問題是所有 AI 醫療應用共同面臨的障礙。高偽陽性率、演算法的「黑箱」性質以及數據偏見等技術瓶頸也亟待解決。
-
-未來的發展方向明確指向「人機協作」的模式。AI 不會取代醫生，而是將他們從繁瑣、重複的任務中解放出來，讓他們能更專注於複雜病例的綜合判斷、與患者的溝通以及制定個人化的治療方案。為了實現這一願景，未來的研究需要不僅專注於演算法的優化，更要著重於建立標準化的評估基準、完善監管與倫理框架，並設計能無縫融入臨床工作流程的解決方案。最終，AI 的成功將取決於它能否真正成為醫生信賴的夥伴，共同提升醫療服務的品質與可及性。
-
-### 來源
-
-[1] Artificial Intelligence-Empowered Radiology—Current Status and Future Perspectives: A State-of-the-Art Review: https://pmc.ncbi.nlm.nih.gov/articles/PMC11816879/
-[2] Artificial intelligence for diagnostics in radiology practice: a rapid ...: https://www.thelancet.com/journals/eclinm/article/PIIS2589-5370(25)00160-9/fulltext
-[3] Deep learning applications in breast cancer histopathological images: a review for diagnosis, treatment, and prognosis: https://breast-cancer-research.biomedcentral.com/articles/10.1186/s13058-024-01895-6
-[4] A Systematic Review of AI Performance in Lung Cancer Detection and Classification From Chest Computed Tomography: https://pmc.ncbi.nlm.nih.gov/articles/PMC12250385/
-[5] Enhancing diagnostic accuracy in bone fracture detection from X-ray images using ensemble deep learning models: https://www.science-gate.com/IJAAS/2025/V12I5/1021833ijaas202505008.html
-[6] The 2025 guide to clinical-ready tools [Using AI for X-ray] - AZmed: https://www.azmed.co/news-post/ai-in-radiology-the-2025-guide-to-clinical-ready-tools-using-ai-for-x-ray
-[7] EU and US Regulatory Challenges Facing AI Health Care Innovator ...: https://law.stanford.edu/2024/04/06/eu-and-us-regulatory-challenges-facing-ai-health-care-innovator-firms/
-[8] The Ethical Implications of AI in Clinical Practice in 2025 - RevMaxx: https://www.revmaxx.co/blog/the-ethical-implications-of-ai-in-clinical-practice-in-2025/
-[9] Artificial Intelligence-Empowered Radiology—Current Status and ...: https://pmc.ncbi.nlm.nih.gov/articles/PMC11816879/
-[10] Digital pathology and AI: your guide to basics and beyond - Aiforia: https://www.aiforia.com/digital-pathology-ai
-[11] Current AI technologies in cancer diagnostics and treatment: https://molecular-cancer.biomedcentral.com/articles/10.1186/s12943-025-02369-9
-[12] Clinical Validation of Artificial Intelligence–Augmented Pathology...: https://www.paige.ai/publications/clinical-validation-of-artificial-intelligenceaugmented-pathology-diagnosis-demonstrates-significant-gains-in-diagnostic-accuracy-in-prostate-cancer-detection
-[13] Unleashing the potential of AI for pathology: challenges and ...: https://pathsocjournals.onlinelibrary.wiley.com/doi/full/10.1002/path.6168
-[14] The ethical challenges of artificial intelligence‐driven digital pathology: https://onlinelibrary.wiley.com/doi/10.1002/cjp2.263
- `,
+[1] 台積電(TSMC) 最新2025年展望：半導體技術、法說會與關稅 ...: https://opas.school/posts/tsm
+[2] Semiconductors: Taiwan's case of 'Dutch disease'?: https://www.nottingham.ac.uk/research/groups/taiwan-research-hub/documents/michael-reilly-1123-paper.pdf
+[3] 台積電2024年12月供應鏈管理論壇頒發優良供應商獎項給27家廠商 (研究發現中提及，但未提供URL)
+[4] 台積電法說會對台灣半導體產業鏈的長期影響為何？: https://aigc-note.cmoney.tw/answer/%E5%8F%B0%E7%A9%8D%E9%9B%BB%E6%B3%95%E8%AA%AA%E6%9C%83-97-1213834
+[5] Ensuring a stronger US-Taiwan tech supply chain ...: https://www.brookings.edu/articles/ensuring-a-stronger-us-taiwan-tech-supply-chain-partnership/
+[6] 產業分析：半導體投資模式為「大廠引導供應鏈」(研究發現中提及，但未提供URL)
+[7] 工研院報告：台灣半導體產業的歷史與模式 (研究發現中提及，但未提供URL)
+[8] 創新管理: https://esg.tsmc.com/file/public/c-AnInnovationPioneer_1.pdf
+[9] 台灣本土設備廠商結盟組隊，隨台積電出海布局國際市場 (研究發現中提及，但未提供URL)
+[10] 台積電2024年度永續報告書 (研究發現中提及，但未提供URL)
+[11] 經濟部智慧財產局統計：台積電連續九年位居發明專利申請之首 (研究發現中提及，但未提供URL)
+[12] 台積電2013年資本支出提高至90億美元 (研究發現中提及，但未提供URL)
+[13] Taiwan's Semiconductor Sustainability and Global Implications: https://newlinesinstitute.org/geo-economics/taiwans-semiconductor-sustainability-and-global-implications/
+[14] Water and microchips: the climatic and industrial future of Taiwan: https://gauthierroussilhe.com/en/articles/water-and-microchips-the-climatic-and-industrial-future-of-taiwan
+[15] TSMC is Building 11 Extra Production Lines in Taiwan Besides $100 ...: https://techsoda.substack.com/p/tsmcs-us100-bln-investment-was-driven
+[16] Chip boom 'does not harm' other sectors - Taipei Times: https://www.taipeitimes.com/News/biz/archives/2022/11/10/2003788603
+[17] On the tailor-made water governance mechanism for Taiwan's ...: https://www.sciencedirect.com/science/article/pii/S2212371724000143
+[18] TSMC: The Enduring Silicon Shield of Taiwan's Economy: https://taiwaninsight.org/2025/05/12/tsmc-the-enduring-silicon-shield-of-taiwans-economy/
+[19] Silicon Island: Assessing Taiwan’s Importance to U.S. Economic ...: https://www.csis.org/analysis/silicon-island-assessing-taiwans-importance-us-economic-growth-and-security
+[20] Why Taiwan Fears 'America First' Risks Eroding Its 'Silicon ...: https://www.stimson.org/2025/why-taiwan-fears-america-first-risks-eroding-its-silicon-shield/`,
       characterLimit: 10000,
       
     }
@@ -168,7 +176,8 @@ const templates = [
   },
 ]
 
-async function startEditor(titleFromUser: string) {
+type PendingAttachment = { id: string; url: string; name: string; type: string; size: number }
+async function startEditor(titleFromUser: string, attachments?: PendingAttachment[]) {
   const doc = await initDocument()
   const title = titleFromUser?.trim() || doc.title || '新文檔'
   const content = doc.content?.trim() ? doc.content : `<h1>${title}</h1><p></p>`
@@ -302,10 +311,17 @@ async function startEditor(titleFromUser: string) {
   }
 
   stage.value = 'editor'
+
+  // 如果有從新建頁面帶入的附件，這裡可選擇插入提示或記錄
+  if (attachments && attachments.length > 0) {
+    console.log('帶入的附件:', attachments)
+    // 如需立即插入到文件，可在此調用 editor API 或透過 onFileUpload 整合
+  }
 }
 
 function onCancelNew() {
-  // 保持在新建頁；若需要可在此導入預設流程
+  // 取消時直接進入編輯器，使用預設內容
+  void startEditor('')
 }
 </script>
 

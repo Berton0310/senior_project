@@ -34,7 +34,7 @@
           rows="1"
           @keydown.enter.exact.prevent="onSend"
           @keydown.enter.shift.exact.prevent="inputMsg += '\n'"
-        />
+        ></textarea>
         <div class="umo-ai-actions">
           <button
             class="umo-ai-send"
