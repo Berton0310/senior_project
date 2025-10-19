@@ -1,14 +1,5 @@
 <template>
-  <div class="new-doc">
-    <!-- 左側可縮放側欄 -->
-    <aside class="nd-sidebar" :style="{ width: sidebarWidth + 'px' }">
-      <div class="nd-sidebar__content">
-        <!-- 在此放側欄內容（清單/模板/說明等） -->
-        <div class="nd-sidebar__placeholder">側欄內容</div>
-      </div>
-      <div class="nd-sidebar__resize" @mousedown="startSidebarResize"></div>
-    </aside>
-
+  <div class="new-doc" id="new-document">
     <t-card header="" style="width:100%; height:100%;" class="flat-card nd-main">
       <div style="display:flex; flex-direction:column; gap:12px; height:100%; justify-content:center; align-items:center; width:100%;">
         <!-- 進度視覺化：生成期間顯示 -->
@@ -100,6 +91,12 @@
 
         <!-- 輸入與操作：非生成期間顯示 -->
         <div v-show="!generating">
+          <!-- 標題區域 -->
+          <div class="title-section">
+            <div class="title-main">全能報告生成助手</div>
+            <div class="title-subtitle">AI 驅動的智能文檔創作平台</div>
+          </div>
+          
           <!-- <label for="report書題目">請輸入報告書題目</label> -->
           <div class="input-pill">
             <t-textarea
@@ -107,11 +104,9 @@
               v-model="title"
               :readonly="generating"
               placeholder="例如：2025 年 Q4 成果報告"
-              autosize
               autocomplete="off"
               rows="1"
-              @keydown.enter.exact.prevent="onEnter()"
-              @keydown.enter.shift.exact.stop
+              @keydown="onTextareaKeydown"
               @compositionstart="onCompositionStart"
               @compositionend="onCompositionEnd"
               class="modern-textarea"
@@ -156,28 +151,185 @@
           <t-alert v-if="error" class="t-alert-transparent" theme="error" :message="error" :close="false" />
         </div>
         
+        <!-- 附件列表：顯示已上傳的附件 -->
+        <div v-if="conversionItems.length > 0" class="attachment-list" style="margin-top: 16px; width: 720px; margin-left: auto; margin-right: auto;">
+          <div class="attachment-header">
+            <h4>已上傳附件 ({{ conversionItems.length }})</h4>
+          </div>
+          <div class="attachment-items">
+            <div v-for="item in conversionItems" :key="item.id" class="attachment-item" :class="`status-${item.status}`">
+              <div class="attachment-icon">
+                <!-- 上傳中：旋轉圖示 -->
+                <svg v-if="item.status === 'uploading'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 1.5em; height: 1.5em;" class="rotating">
+                  <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                </svg>
+                <!-- 轉換中：旋轉圖示 -->
+                <svg v-else-if="item.status === 'converting'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 1.5em; height: 1.5em;" class="rotating">
+                  <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                </svg>
+                <!-- 已完成：綠色勾勾 -->
+                <svg v-else-if="item.status === 'completed'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 1.5em; height: 1.5em;" class="status-completed">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22,4 12,14.01 9,11.01"/>
+                </svg>
+                <!-- 上傳失敗：紅色 X -->
+                <svg v-else-if="item.status === 'failed'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 1.5em; height: 1.5em;" class="status-failed">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" y1="9" x2="9" y2="15"/>
+                  <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <div class="attachment-content">
+                <div class="attachment-title">{{ item.fileName }}</div>
+                <div class="attachment-meta">
+                  <span v-if="item.status === 'uploading'">正在上傳...</span>
+                  <span v-else-if="item.status === 'converting'">正在轉換...</span>
+                  <span v-else-if="item.status === 'completed'">轉換完成</span>
+                  <span v-else-if="item.status === 'failed'" class="error-text">{{ item.errorMessage }}</span>
+                  <span class="file-size">({{ formatFileSize(item.fileSize) }})</span>
+                </div>
+                <!-- 上傳進度條 -->
+                <div v-if="item.status === 'uploading' || item.status === 'converting'" class="progress-bar">
+                  <div class="progress-bar-fill"></div>
+                </div>
+              </div>
+              <div class="attachment-actions">
+                <t-button 
+                  v-if="item.status === 'completed' && item.convertedUrl"
+                  theme="primary" 
+                  variant="text" 
+                  size="small"
+                  @click="viewMarkdownContent(item)"
+                >
+                  檢視 Markdown
+                </t-button>
+                <t-button 
+                  v-if="item.status === 'completed' && item.convertedUrl"
+                  theme="default" 
+                  variant="text" 
+                  size="small"
+                  @click="openConvertedFile(item)"
+                >
+                  查看原始
+                </t-button>
+                <t-button 
+                  v-if="item.status === 'failed'"
+                  theme="default" 
+                  variant="text" 
+                  size="small"
+                  @click="retryConversion(item)"
+                >
+                  重試
+                </t-button>
+                <t-button 
+                  theme="default" 
+                  variant="text" 
+                  size="small"
+                  @click="removeConversionItem(item)"
+                >
+                  移除
+                </t-button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 進度日誌：任何時候都顯示 -->
+        <div v-if="progress.length" class="progress" style="margin-top: 16px; width: 720px; margin-left: auto; margin-right: auto;">
+          <div class="progress-list">
+            <div v-for="(p, i) in progress" :key="i" class="log-line">
+              <span class="type">[{{ p.type ?? 'info' }}]</span>
+              <span v-if="p.stage" class="stage">({{ p.stage }})</span>
+              <span>{{ p.message }}</span>
+            </div>
+          </div>
+        </div>
         
       </div>
     </t-card>
-    <!-- 右下浮動按鈕 -->
-    <button class="doc-fab" aria-label="清單">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <rect fill="none" width="24" height="24"/>
-        <path fill="#0090ff" d="M1,12C1,4,4,1,12,1S23,4,23,12,20,23,12,23,1,20,1,12"/>
-        <rect fill="#ffffff" height="1.44" rx="0.72" width="12.24" x="5.88" y="7.56"/>
-        <rect fill="#ffffff" height="1.44" rx="0.72" width="12.24" x="5.88" y="10.28"/>
-        <rect fill="#ffffff" height="1.44" rx="0.72" width="12.24" x="5.88" y="13"/>
-        <rect fill="#ffffff" height="1.44" rx="0.72" width="7.44" x="5.88" y="15.72"/>
-      </svg>
-    </button>
+
+    <!-- 隱藏檔案選擇器 -->
+    <input ref="filePickerRef" type="file" style="display:none" @change="onFileChosen" />
+
+    <!-- Markdown 檢視 Modal -->
+    <t-dialog
+      v-model:visible="showMarkdownModal"
+      :header="markdownModalTitle"
+      width="80%"
+      height="80%"
+      :close-on-overlay-click="true"
+      :close-on-esc-keydown="true"
+    >
+      <div class="markdown-viewer">
+        <!-- 工具欄 -->
+        <div class="markdown-toolbar">
+          <div class="toolbar-left">
+            <div class="view-mode-buttons">
+              <t-button 
+                :variant="markdownViewMode === 'raw' ? 'base' : 'outline'"
+                @click="markdownViewMode = 'raw'"
+                size="small"
+              >
+                原始
+              </t-button>
+              <t-button 
+                :variant="markdownViewMode === 'preview' ? 'base' : 'outline'"
+                @click="markdownViewMode = 'preview'"
+                size="small"
+              >
+                預覽
+              </t-button>
+              <t-button 
+                :variant="markdownViewMode === 'split' ? 'base' : 'outline'"
+                @click="markdownViewMode = 'split'"
+                size="small"
+              >
+                並排
+              </t-button>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <t-button @click="copyMarkdownContent" size="small">複製內容</t-button>
+            <t-button @click="insertToEditor" size="small">插入到編輯器</t-button>
+            <t-button @click="downloadMarkdown" size="small">下載檔案</t-button>
+          </div>
+        </div>
+        
+        <!-- 內容區域 -->
+        <div class="markdown-content">
+          <!-- 原始 Markdown -->
+          <div v-if="markdownViewMode === 'raw'" class="markdown-raw">
+            <pre>{{ markdownContent }}</pre>
+          </div>
+          
+          <!-- 渲染後的 HTML -->
+          <div v-else-if="markdownViewMode === 'preview'" class="markdown-preview" v-html="renderedMarkdown"></div>
+          
+          <!-- 並排顯示 -->
+          <div v-else-if="markdownViewMode === 'split'" class="markdown-split">
+            <div class="markdown-raw">
+              <h4>原始 Markdown</h4>
+              <pre>{{ markdownContent }}</pre>
+            </div>
+            <div class="markdown-preview">
+              <h4>預覽</h4>
+              <div v-html="renderedMarkdown"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </t-dialog>
+
   </div>
   
 </template>
 
 <script setup lang="ts">
+import { marked } from 'marked'
+
 type PendingAttachment = { id: string; url: string; name: string; type: string; size: number }
 const emit = defineEmits<{
-  (e: 'confirm', title: string, attachments?: PendingAttachment[]): void
+  (e: 'confirm', title: string, attachments?: PendingAttachment[], documentId?: string): void
   (e: 'cancel'): void
 }>()
 
@@ -188,36 +340,44 @@ const progress = ref<Array<{ type?: string; stage?: string; message: string }>>(
 let es: EventSource | null = null
 const canceling = ref(false)
 let composing = false
-const sidebarOpen = ref(true)
-const sidebarWidth = ref(260)
-const minSidebarWidth = 260
-const maxSidebarWidth = 500
-let resizingSidebar = false
-let resizeStartX = 0
-let startWidth = 260
 
-function startSidebarResize(e: MouseEvent) {
-  resizingSidebar = true
-  resizeStartX = e.clientX
-  startWidth = sidebarWidth.value
-  document.body.style.userSelect = 'none'
-  document.addEventListener('mousemove', onSidebarResize)
-  document.addEventListener('mouseup', stopSidebarResize)
-}
-function onSidebarResize(e: MouseEvent) {
-  if (!resizingSidebar) return
-  const delta = e.clientX - resizeStartX
-  const next = Math.max(minSidebarWidth, Math.min(maxSidebarWidth, startWidth + delta))
-  sidebarWidth.value = next
-}
-function stopSidebarResize() {
-  resizingSidebar = false
-  document.body.style.userSelect = ''
-  document.removeEventListener('mousemove', onSidebarResize)
-  document.removeEventListener('mouseup', stopSidebarResize)
-}
+// 為需要使用 Tooltip/Popup 的子元件提供容器
+provide('container', '#new-document')
+
 // 立即上傳後暫存的附件結果（待進入編輯器時插入）
 const pendingAttachments = ref<PendingAttachment[]>([])
+
+// PDF 轉換狀態管理
+interface ConversionItem {
+  id: string
+  fileName: string
+  fileSize: number
+  uploadTime: Date
+  status: 'uploading' | 'converting' | 'completed' | 'failed'
+  progress?: number
+  errorMessage?: string
+  convertedUrl?: string
+}
+const conversionItems = ref<ConversionItem[]>([])
+
+// Markdown 檢視相關變數
+const showMarkdownModal = ref(false)
+const markdownModalTitle = ref('')
+const markdownContent = ref('')
+const markdownViewMode = ref<'raw' | 'preview' | 'split'>('preview')
+
+// Markdown 渲染計算屬性
+const renderedMarkdown = computed(() => {
+  try {
+    return marked(markdownContent.value)
+  } catch (error) {
+    console.error('Markdown 渲染錯誤:', error)
+    return '<p>Markdown 渲染失敗</p>'
+  }
+})
+
+// 提供附件數據給 app.vue 使用
+provide('conversionItems', conversionItems)
 const filePickerRef = ref<HTMLInputElement | null>(null)
 
 function onPickAttachment() {
@@ -235,6 +395,19 @@ function onFileChosen(e: Event) {
 async function uploadAttachment(file: File) {
   try {
     pushLog({ type: 'info', message: `正在上傳附件：${file.name}` })
+    
+    // 如果是 PDF 檔案，加入轉換清單
+    if (file.type === 'application/pdf') {
+      const conversionItem: ConversionItem = {
+        id: `pdf-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        fileName: file.name,
+        fileSize: file.size,
+        uploadTime: new Date(),
+        status: 'uploading'
+      }
+      conversionItems.value.push(conversionItem)
+    }
+    
     const form = new FormData()
     form.append('file', file)
     const res = await fetch('http://localhost:8000/upload', {
@@ -242,24 +415,254 @@ async function uploadAttachment(file: File) {
       body: form,
     })
     if (!res.ok) throw new Error('上傳失敗')
-    const data = await res.json() as { id: string; url: string; name?: string }
-    const item = {
-      id: data.id,
-      url: data.url,
-      name: data.name ?? file.name,
-      type: file.type,
-      size: file.size,
+    const data = await res.json() as { 
+      id: string; 
+      url: string; 
+      name?: string; 
+      processed?: boolean; 
+      status?: string; 
+      error?: string 
     }
-    pendingAttachments.value.push(item)
-    pushLog({ type: 'info', message: `附件已上傳：${item.name}` })
+    
+    // 如果是 PDF，根據後端回應更新轉換狀態
+    if (file.type === 'application/pdf') {
+      const item = conversionItems.value.find((c: ConversionItem) => c.fileName === file.name)
+      if (item) {
+        if (data.processed && data.status === 'completed') {
+          item.status = 'completed'
+          // 將相對路徑轉換為絕對路徑，使用 8000 端口
+          console.log('後端回傳的 data.url:', data.url)
+          if (data.url.startsWith('/')) {
+            // 相對路徑，轉換為絕對路徑
+            item.convertedUrl = `http://localhost:8000${data.url}`
+          } else {
+            // 已經是絕對路徑，替換端口
+            item.convertedUrl = data.url.replace(':9000', ':8000')
+          }
+          console.log('設定後的 item.convertedUrl:', item.convertedUrl)
+          pushLog({ type: 'info', message: `PDF 轉換完成：${file.name}` })
+        } else if (data.status === 'failed') {
+          item.status = 'failed'
+          item.errorMessage = data.error || '轉換失敗'
+          pushLog({ type: 'error', message: `PDF 轉換失敗：${file.name} - ${item.errorMessage}` })
+        } else {
+          item.status = 'converting'
+          pushLog({ type: 'info', message: `正在轉換 PDF：${file.name}` })
+        }
+      }
+    } else {
+      // 非 PDF 檔案直接加入待處理附件
+      const item = {
+        id: data.id,
+        url: data.url,
+        name: data.name ?? file.name,
+        type: file.type,
+        size: file.size,
+      }
+      pendingAttachments.value.push(item)
+    }
+    
+    pushLog({ type: 'info', message: `附件已上傳：${file.name}` })
   } catch (err: any) {
     pushLog({ type: 'error', message: `附件上傳失敗：${err?.message ?? '未知錯誤'}` })
+    
+    // 如果是 PDF 上傳失敗，更新狀態
+    if (file.type === 'application/pdf') {
+      const item = conversionItems.value.find((c: ConversionItem) => c.fileName === file.name)
+      if (item) {
+        item.status = 'failed'
+        item.errorMessage = err?.message ?? '上傳失敗'
+      }
+    }
+  }
+}
+
+// 附件操作函式
+function openConvertedFile(item: ConversionItem) {
+  if (item.convertedUrl) {
+    console.log('=== openConvertedFile 調用 ===')
+    console.log('item.convertedUrl:', item.convertedUrl)
+    console.log('============================')
+    
+    // 直接使用 convertedUrl，因為它已經是正確的絕對路徑
+    window.open(item.convertedUrl, '_blank')
+  } else {
+    console.error('convertedUrl 不存在:', item)
+  }
+}
+
+function retryConversion(item: ConversionItem) {
+  // 重新上傳檔案
+  const file = new File([''], item.fileName, { type: 'application/pdf' })
+  void uploadAttachment(file)
+}
+
+function removeConversionItem(item: ConversionItem) {
+  const index = conversionItems.value.findIndex((c: ConversionItem) => c.id === item.id)
+  if (index !== -1) {
+    conversionItems.value.splice(index, 1)
+  }
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) return '0 B'
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+// Markdown 檢視相關函式 - 參考 app.vue 的實作方式
+async function viewMarkdownContent(item: ConversionItem) {
+  try {
+    console.log('=== 檢視 Markdown ===')
+    console.log('檔案名稱:', item.fileName)
+    console.log('convertedUrl:', item.convertedUrl)
+    console.log('==================')
+    
+    // 設定標題
+    markdownModalTitle.value = item.fileName
+    
+    // 構建 API URL - 不傳入 documentId，只傳入檔案名稱
+    let apiUrl = 'http://localhost:8000/markdown'
+    const params = new URLSearchParams()
+    
+    // 只傳入檔案名稱，不傳入 documentId
+    if (item.fileName) {
+      params.append('file_name', item.fileName)
+    }
+    
+    if (params.toString()) {
+      apiUrl += `?${params.toString()}`
+    }
+    
+    console.log('API URL:', apiUrl)
+    
+    // 發送請求
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json; charset=utf-8',
+      }
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
+    
+    // 確保正確處理編碼
+    const text = await response.text()
+    let data
+    try {
+      data = JSON.parse(text)
+    } catch (e) {
+      console.error('JSON 解析失敗:', e)
+      console.error('原始回應:', text)
+      throw new Error('回應格式錯誤')
+    }
+    console.log('API 回傳資料:', data)
+    
+    // 檢查回傳資料格式
+    if (data && typeof data === 'object') {
+      if (data.content) {
+        markdownContent.value = data.content
+      } else if (data.markdown) {
+        markdownContent.value = data.markdown
+      } else if (data.text) {
+        markdownContent.value = data.text
+      } else {
+        throw new Error('API 回傳資料中沒有找到 Markdown 內容')
+      }
+      
+      // 更新標題（如果 API 回傳了檔案名稱）
+      if (data.fileName) {
+        markdownModalTitle.value = data.fileName
+      } else if (data.filename) {
+        markdownModalTitle.value = data.filename
+      }
+    } else if (typeof data === 'string') {
+      // 如果直接回傳字串
+      markdownContent.value = data
+    } else {
+      throw new Error('API 回傳資料格式不正確')
+    }
+    
+    // 顯示 Modal
+    showMarkdownModal.value = true
+    
+  } catch (error) {
+    console.error('讀取 Markdown 內容失敗:', error)
+    
+    // 錯誤處理：顯示預設內容
+    markdownContent.value = `# ${markdownModalTitle.value}
+
+## 讀取失敗
+
+無法從伺服器讀取 Markdown 內容。
+
+### 錯誤詳情
+\`\`\`
+${error instanceof Error ? error.message : String(error)}
+\`\`\`
+
+### 請求參數
+- 檔案名稱: ${item.fileName || '無'}
+
+### 可能的解決方案
+1. 檢查伺服器是否正在運行
+2. 確認 API 端點是否正確
+3. 檢查網路連接
+4. 確認檔案是否存在
+
+---
+
+**注意**: 請檢查控制台以獲取更多錯誤詳情。`
+    
+    showMarkdownModal.value = true
+  }
+}
+
+// Markdown 工具欄功能
+function copyMarkdownContent() {
+  navigator.clipboard.writeText(markdownContent.value).then(() => {
+    console.log('Markdown 內容已複製到剪貼簿')
+  }).catch((error) => {
+    console.error('複製失敗:', error)
+  })
+}
+
+function insertToEditor() {
+  // 在 new-document.vue 中，我們可以將內容添加到標題或準備插入到編輯器
+  if (markdownContent.value) {
+    // 可以將 Markdown 內容添加到標題中，或者準備在進入編輯器時插入
+    console.log('準備插入 Markdown 內容到編輯器')
+    showMarkdownModal.value = false
+    // 這裡可以添加邏輯來處理內容插入
+  }
+}
+
+function downloadMarkdown() {
+  try {
+    const blob = new Blob([markdownContent.value], { type: 'text/markdown;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${markdownModalTitle.value.replace(/\.[^/.]+$/, '')}.md`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    console.log('Markdown 檔案已下載')
+  } catch (error) {
+    console.error('下載失敗:', error)
   }
 }
 
 // 後端 SSE 端點（依實際部署調整）
 const SSE_ENDPOINT = 'http://localhost:8000/research/stream'
 const CANCEL_ENDPOINT = 'http://localhost:8000/research/cancel'
+
 // 研究進度視覺化狀態
 const stages = [
   { id: 'clarify', name: '需求澄清', description: '確認研究範圍與目標' },
@@ -349,7 +752,12 @@ function onConfirm() {
           report?: string
           done?: boolean
           iteration?: number
+          filename?: string
+          status?: string
+          document_id?: string
         }
+        
+        
         // 標準化事件：type:'stage' 時直接更新階段與迭代
         if (data.type === 'stage' && data.stage) {
           currentStage.value = data.stage
@@ -377,11 +785,24 @@ function onConfirm() {
         }
         if (data.type === 'final_report') {
           pushLog({ type: 'info', message: '最終報告已生成' })
+          
+          // 取得 document_id (task_id)
+          const documentId = data.document_id
+          if (documentId) {
+            pushLog({ type: 'info', message: `文檔 ID: ${documentId}` })
+          }
+          
+          // 在 console 顯示標題和 ID
+          console.log('=== 報告完成資訊 ===')
+          console.log('報告標題:', title.value.trim())
+          console.log('文檔 ID:', documentId)
+          console.log('==================')
+          
           es?.close()
           es = null
           generating.value = false
           isConnected.value = false
-          emit('confirm', title.value.trim(), pendingAttachments.value)
+          emit('confirm', title.value.trim(), pendingAttachments.value, documentId)
           return
         }
         if (data.type === 'stage_complete') {
@@ -419,10 +840,21 @@ function onCompositionEnd() {
   composing = false
 }
 
+function onTextareaKeydown(e: KeyboardEvent) {
+  if (e.key !== 'Enter') return
+  if (e.shiftKey) {
+    e.stopPropagation()
+    return
+  }
+  e.preventDefault()
+  onEnter()
+}
+
 function onEnter() {
   if (composing) return
   onConfirm()
 }
+
 </script>
 
 <style scoped>
@@ -433,27 +865,6 @@ function onEnter() {
   justify-content: flex-start;
   padding: 0;
 }
-.nd-sidebar {
-  height: 100%;
-  width: 260px;
-  border-right: 1px solid #e5e7eb;
-  background: #fafafa;
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-.nd-sidebar__resize {
-  position: absolute;
-  top: 0;
-  right: -2px;
-  width: 4px;
-  height: 100%;
-  background: transparent;
-  cursor: col-resize;
-}
-.nd-sidebar__content { padding: 12px; overflow: auto; }
-.nd-sidebar__placeholder { color: #94a3b8; font-size: 12px; }
 .nd-main { flex: 1; display: flex; align-items: center; justify-content: center; }
 .flat-card :deep(.t-card__body) {
   /* 內層容器無邊框背景，保持卡片語意但視覺扁平 */
@@ -580,24 +991,47 @@ function onEnter() {
 .pill-send :deep(.umo-button__text) { padding: 0; }
 .input-hint { margin-top: 6px; font-size: 12px; color: #94a3b8; }
 
-/* 右下浮動按鈕 */
-.doc-fab {
-  position: fixed;
-  right: 28px;
-  bottom: 28px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1200;
+/* 標題樣式 */
+.title-section {
+  text-align: center;
+  margin-bottom: 32px;
+  margin-top: -40px;
+  padding: 0 20px;
 }
-.doc-fab svg { width: 44px; height: 44px; display: block; }
+
+.title-main {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  transform: translateY(-8px);
+}
+
+.title-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 400;
+  opacity: 0.8;
+  letter-spacing: 0.01em;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .title-main {
+    font-size: 2rem;
+  }
+  
+  .title-subtitle {
+    font-size: 1rem;
+  }
+  
+  .title-section {
+    margin-bottom: 24px;
+  }
+}
 
 /* 進度視覺化樣式 */
 .viz-wrapper { display: flex; flex-direction: column; gap: 16px; }
@@ -634,6 +1068,351 @@ function onEnter() {
 .iter-step { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 600; background: #e5e7eb; color: #94a3b8; transition: all .2s ease; }
 .iter-step.iter-done { background: #22c55e; color: #fff; }
 .iter-step.iter-active { background: #2563eb; color: #fff; transform: scale(1.06); box-shadow: 0 8px 20px rgba(37,99,235,.25); }
+
+/* 附件列表樣式 */
+.attachment-list {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.attachment-header {
+  margin-bottom: 12px;
+}
+
+.attachment-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.attachment-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.attachment-item:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.attachment-item.status-uploading,
+.attachment-item.status-converting {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.attachment-item.status-completed {
+  border-color: #10b981;
+  background: #ecfdf5;
+}
+
+.attachment-item.status-failed {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.attachment-icon {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.attachment-icon .rotating {
+  animation: spin 1s linear infinite;
+}
+
+.attachment-icon .status-completed {
+  color: #10b981;
+}
+
+.attachment-icon .status-failed {
+  color: #ef4444;
+}
+
+.attachment-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.attachment-title {
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attachment-meta {
+  font-size: 12px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.attachment-meta .error-text {
+  color: #ef4444;
+}
+
+.attachment-meta .file-size {
+  color: #9ca3af;
+}
+
+.attachment-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: 12px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 2px;
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Markdown 檢視樣式 */
+.markdown-viewer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.markdown-toolbar {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 8px;
+}
+
+.view-mode-buttons {
+  display: flex;
+  gap: 0;
+}
+
+.view-mode-buttons .t-button {
+  border-radius: 0;
+  border-right: none;
+}
+
+.view-mode-buttons .t-button:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.view-mode-buttons .t-button:last-child {
+  border-radius: 0 6px 6px 0;
+  border-right: 1px solid #d1d5db;
+}
+
+.view-mode-buttons .t-button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.markdown-content {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  background: white;
+}
+
+.markdown-raw {
+  height: 100%;
+}
+
+.markdown-raw pre {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  overflow: auto;
+  font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid #e5e7eb;
+  margin: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.markdown-preview {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-preview h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.markdown-preview h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.markdown-preview h3 {
+  font-size: 1.25em;
+}
+
+.markdown-preview p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.markdown-preview li {
+  margin-bottom: 4px;
+}
+
+.markdown-preview blockquote {
+  margin: 16px 0;
+  padding: 16px;
+  background: #f8fafc;
+  border-left: 4px solid #3b82f6;
+  border-radius: 0 4px 4px 0;
+}
+
+.markdown-preview code {
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.markdown-preview pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 16px;
+  border-radius: 8px;
+  overflow: auto;
+  margin: 16px 0;
+}
+
+.markdown-preview pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.markdown-preview th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.markdown-preview hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 24px 0;
+}
+
+.markdown-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  height: 100%;
+}
+
+.markdown-split .markdown-raw,
+.markdown-split .markdown-preview {
+  height: 100%;
+  overflow: auto;
+}
+
+.markdown-split h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
 </style>
 
 <style scoped>

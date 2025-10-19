@@ -36,6 +36,7 @@
           @keydown.enter.shift.exact.prevent="inputMsg += '\n'"
         ></textarea>
         <div class="umo-ai-actions">
+          <!-- 送出按鈕 -->
           <button
             class="umo-ai-send"
             type="submit"
@@ -59,6 +60,8 @@
         </div>
       </div>
     </form>
+    
+    
     <div class="umo-ai-resize-handle" @mousedown="startResize"></div>
   </div>
 </template>
@@ -100,6 +103,7 @@ const onSend = () => {
     autoResize()
   })
 }
+
 watch(
   () => props.width,
   (w: number | undefined) => {
@@ -278,6 +282,7 @@ const stopResize = () => {
     color: #fff; /* 箭頭線條為白色 */
     display: block;
   }
+  
   .umo-ai-msg--generating {
     align-self: flex-start;
     background: #f5f5f5;
